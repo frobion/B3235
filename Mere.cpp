@@ -29,7 +29,7 @@ int main(void) {
 //	if ((pidC = fork()) == 0)
  //   	{
 //		// Fonction faite par Francois
-//		Simulation();
+//		Simulation(shmDescripteur, FilePlace);
 //	}
 //Sortie
 //	else if ((pidSortie = fork()) == 0)
