@@ -1,0 +1,7 @@
+# fichiers sources ignorés
+*~
+
+
+#dossier de compilation
+build/
+
