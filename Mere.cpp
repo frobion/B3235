@@ -1,6 +1,12 @@
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <signal.h>
+
 #include "Outils.h"
 #include "Heure.h"
-#include <unistd.h>
+
+#include "Simulation.h"
 
 int main(void) {
 
@@ -26,11 +32,11 @@ int main(void) {
 
 
 //Simulation
-//	if ((pidC = fork()) == 0)
- //   	{
-//		// Fonction faite par Francois
-//		Simulation(shmDescripteur, FilePlace);
-//	}
+	if ((pidSimu = fork()) == 0)
+  	{
+		// Fonction faite par Francois
+		Simulation();
+	}
 //Sortie
 //	else if ((pidSortie = fork()) == 0)
 //  	{
@@ -53,13 +59,16 @@ int main(void) {
 //		GestionEntree(shmDescripteur,filePlace, ENTREE_GASTON_BERGER);
 //	}
 
-//	else //Code Mere
-//	{
-
+	else //Code Mere
+	{
+	
+	waitpid(pidSimu, NULL, 0);
+	kill(pidHeure, SIGUSR2);
+	
 	TerminerApplication(true);
 
 	return 0;
 
-//	}
+	}
 
 }

@@ -1,8 +1,8 @@
 EXE = Parking
 
 # Compilateur et editeur de lien
-COMP = @g++
-LINK = @g++
+COMP = g++
+LINK = g++
 
 # Options de compilation et editions de liens
 CHEMIN = /share/public/tp/tp-multitache
@@ -15,7 +15,7 @@ EDLFLAGS = $(LIB)
 #Fichiers
 
 SRC =
-INT = Mere.h  #Mettre les .h ici
+INT = Mere.h Simulation.h  #Mettre les .h ici
 REAL = $(INT:.h=.cpp)
 OBJ = $(INT:.h=.o) Mere.o #Mettre le .o du programme de test la où ya le main
 

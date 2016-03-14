@@ -1,4 +1,5 @@
 #include "Outils.h"
+#include "Menu.h"
 
 void Simulation()
 {
