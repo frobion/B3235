@@ -2,6 +2,7 @@
 *~
 
 
-#dossier de compilation
-build/
+#fichier de compilation
+*.o
+Parking
 
