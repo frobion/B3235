@@ -1,6 +1,8 @@
 # fichiers sources ignorés
 *~
 
+#nettoyage
+clean.sh
 
 #fichier de compilation
 *.o

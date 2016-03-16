@@ -25,7 +25,7 @@ int main(void) {
 	//Heure : Creation
 	pidHeure = ActiverHeure();
 	if (pidHeure == -1) // Gestion des erreurs sur creation d'Heure
-    	{
+  {
 		TerminerApplication(false);
 		exit(0);
 	}
@@ -35,7 +35,11 @@ int main(void) {
 	if ((pidSimu = fork()) == 0)
   	{
 		// Fonction faite par Francois
-		Simulation();
+    int a [3][2];
+    int b [2];
+		Simulation(a, b);
+    //delete [] a;
+    //delete [] b;
 	}
 //Sortie
 //	else if ((pidSortie = fork()) == 0)
@@ -64,7 +68,7 @@ int main(void) {
 	
 	waitpid(pidSimu, NULL, 0);
 	kill(pidHeure, SIGUSR2);
-	
+	// waitpid heure??
 	TerminerApplication(true);
 
 	return 0;

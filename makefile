@@ -30,8 +30,11 @@ $(EXE): $(OBJ)
 
 #Mettre les dependances particulieres ici
 
-src/%.o:%.cpp
+%.o:%.cpp
 	$(COMP) -c $(CPPFLAGS) $<
+
+Mere.cpp:Mere.h Simulation.h
+Simulation.cpp:Simulation.h
 
 clean:
 	$(RM) -fv *.o $(EXE)
