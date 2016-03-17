@@ -4,13 +4,21 @@
 
 #include <unistd.h>
 #include <signal.h>
+#include <fstream>
+#include <iostream>
 
-static int [NB_BARRIERES_ENTREE] descEcritureCanauxBarriereEntree;
+static int descEcritureCanauxBarriereEntree [NB_BARRIERES_ENTREE];
 static int descEcritureCanalBarriereSortie;
+
+static fstream fichier("test.txt");
 
 void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
 {
   // TODO INIT
+  
+  // Ouverture fichier (log)
+  // fstream fichier("test.txt");
+  fichier << "Inir simulation" << std::endl;
   
   // Blocage SIGUSR1, SIGUSR2, SIGCHLD
   sigset_t listeSignalBloque;
@@ -21,7 +29,9 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
   
   sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
   
-  // Fermeture de canaux (3 + 1)
+  // Fermeture ressources passives non utilises
+  
+  // Fermeture de canaux en lecture (3 + 1)
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
     close(canauxBarriereEntree[i][0]);
@@ -42,46 +52,53 @@ void destruction()
   // Fermeture canaux (3 + 1)
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
-    close(descEcritureCanauxBarriereEntree[i];
+    close(descEcritureCanauxBarriereEntree[i]);
   }
   close(descEcritureCanalBarriereSortie);
+  
+  //delete fichier;
   exit(0);
 }
 
 void Commande (char code, unsigned int valeur)
 {
+ 
+  fichier << "Début commande" << std::endl;
   switch(code)
   {
     case 'E':
+      fichier << "Case 'E'" << std::endl;
       destruction();
       break;
-    case 'A':
-      if (valeur == 1)
-      {
-        
-      } else if (valeur == 2)
-      {
-        
-      }
-      else
-      {
-        
-      }
-      break;
-    case 'P':
-            if (valeur == 1)
-      {
-        
-      } else if (valeur == 2)
-      {
-        
-      }
-      else
-      {
-        
-      }
+    //~ case 'A':
+      //~ if (valeur == 1)
+      //~ {
+        //~ 
+      //~ } else if (valeur == 2)
+      //~ {
+        //~ 
+      //~ }
+      //~ else
+      //~ {
+        //~ 
+      //~ }
+      //~ break;
+    //~ case 'P':
+            //~ if (valeur == 1)
+      //~ {
+        //~ 
+      //~ } else if (valeur == 2)
+      //~ {
+        //~ 
+      //~ }
+      //~ else
+      //~ {
+        //~ 
+      //~ }
     default:
-      Afficher(TypeZone::MESSAGE, "Commande: code inconnue");
+      fichier << "default" << std::endl;
+      Afficher(MESSAGE, "Commande: code inconnue");
       
   }
+  fichier << "Fin commane" << std::endl;
 }
