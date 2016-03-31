@@ -36,6 +36,7 @@ $(EXE): $(OBJ)
 Mere.cpp:Mere.h Simulation.h config.h
 Simulation.cpp:Simulation.h config.h
 BarriereSortie.cpp:BarriereSortie.h config.h
+Entree.cpp:Entree.h config.h
 
 clean:
 	$(RM) -fv *.o $(EXE)

@@ -64,14 +64,14 @@ int main(void) {
 		  // Initialisation 
 		for(unsigned int numPlace = 0 ; numPlace < 8 ; numPlace++ )
 		{
-			ParkingMPPtr->parking[numPlace]->usager = AUCUN ;
-			ParkingMPPtr->parking[numPlace]->immatriculation = -1 ;
-			ParkingMPPtr->parking[numPlace]->dateArrive =  -1 ;
+			ParkingMPPtr->parking[numPlace].usager = AUCUN ;
+			ParkingMPPtr->parking[numPlace].immatriculation = -1 ;
+			ParkingMPPtr->parking[numPlace].dateArrive =  -1 ;
 		}
 
 		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
-		int shmIdRequete = shmget(cle3, sizeof(RequetesMP), IPC_CREAT | 0660);
+		int shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
 		
 		  // Attachement
 		RequeteMP* RequeteMPPtr = (RequeteMP*) shmat(shmIdRequete, NULL, 0);
@@ -79,16 +79,16 @@ int main(void) {
 		  // Initialisation 
 		for(unsigned int numRequete = 0 ; numRequete < 3 ; numRequete++ )
 		{
-			RequeteMPPtr->requetes[numRequete]->voiture->usager = AUCUN ;
-			RequeteMPPtr->requetes[numRequete]->voiture->immatriculation = -1 ;
-			RequeteMPPtr->requetes[numRequete]->voiture->dateArrive =  -1 ;
+			RequeteMPPtr->requetes[numRequete].voiture.usager = AUCUN ;
+			RequeteMPPtr->requetes[numRequete].voiture.immatriculation = -1 ;
+			RequeteMPPtr->requetes[numRequete].voiture.dateArrive =  -1 ;
 		}
-		RequeteMPPtdr->nbPlacesOccupees = 0 ;
+		RequeteMPPtr->nbPlacesOccupees = 0 ;
 		
 		
 		// -- Semaphore
-		cle = ftok(pathname, 'Q');
-		int semId = semget(cle, 5,IPC_CREAT | 0660);
+		cle2 = ftok(pathname, 'Q');
+		int semId = semget(cle2, 5,IPC_CREAT | 0660);
 		
 		  // Initialisation des semaphores
 		semctl(semId, NUM_SEM_PARKING, SETVAL, 1);
@@ -121,17 +121,17 @@ int main(void) {
 // Entree Blaise Prof
 	else if ((pidEntrees[0] = fork()) == 0)
   	{
-		GestionEntree(canalEntree,canalSortie, PROF_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId)
+		GestionEntree(canalEntree,canalSortie, PROF_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
 	}
 // Entree Blaise Autre
   	else if ((pidEntrees[1] = fork()) == 0)
     	{
-		GestionEntree(canalEntree,canalSortie, AUTRE_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId)
+		GestionEntree(canalEntree,canalSortie, AUTRE_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
 	}
 // Entree Gaston Berger
   	else if ((pidEntrees[2] = fork()) == 0)
    	{
-		GestionEntree(canalEntree,canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId)
+		GestionEntree(canalEntree,canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId);
 	}
 // Mere
 	else 

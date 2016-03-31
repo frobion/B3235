@@ -9,6 +9,7 @@
 #include <errno.h>
 #include <time.h>
 
+#include "Entree.h"
 #include "Outils.h"
 #include "config.h"
 
@@ -41,7 +42,7 @@ static void HandlerUSR2 ( int noSig )
 // TODO : HANDLER SIGCHLD
 // Mise a jour de memoire partagee parking quand voiturier meurt
 
-void GestionEntree(canalEntree[3][2],canalSortie[2], TypeBarriere typeEntree, shmIdParking, shmIdRequete, semId)
+void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEntree, int shmIdParking, int shmIdRequete, int semId)
 {
     // --  INITIALISATION  --
 	

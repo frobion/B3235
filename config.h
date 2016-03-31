@@ -2,6 +2,7 @@
 #define CONFIG_H
 
 #include "Outils.h"
+#include <sys/sem.h>
 
 struct Voiture
 {
@@ -21,7 +22,7 @@ struct ParkingMP
   Voiture parking [8]; 
 };
 
-struct RequetesMP
+struct RequeteMP
 {
 	Requete requetes [3];
 	int nbPlacesOccupees;
@@ -33,13 +34,13 @@ const int NUM_SEM_GASTON_BERGER = 2;
 const int NUM_SEM_PARKING = 3;
 const int NUM_SEM_REQUETE = 4;
 
-const struct sembuf INCR_DANS_PARKING = {{NUM_SEM_PARKING, 1, 0}};
-const struct sembuf DECR_DANS_PARKING = {{NUM_SEM_PARKING, -1, 0}};
-const struct sembuf INCR_DANS_REQUETE = {{NUM_SEM_REQUETE, 1, 0}};
-const struct sembuf DECR_DANS_REQUETE = {{NUM_SEM_REQUETE, -1, 0}};
+const struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
+const struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
+const struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
+const struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
 
-const struct sembuf INCR_DANS_PROF_BLAISE_PASCAL = {{NUM_SEM_PROF_BLAISE_PASCAL, 1, 0}};
-const struct sembuf INCR_DANS_AUTRE_BLAISE_PASCAL = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
-const struct sembuf INCR_DANS_GASTON_BERGER = {{NUM_SEM_GASTON_BERGER, 1, 0}};
+const struct sembuf INCR_DANS_PROF_BLAISE_PASCAL [1] = {{NUM_SEM_PROF_BLAISE_PASCAL, 1, 0}};
+const struct sembuf INCR_DANS_AUTRE_BLAISE_PASCAL [1] = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
+const struct sembuf INCR_DANS_GASTON_BERGER [1] = {{NUM_SEM_GASTON_BERGER, 1, 0}};
 
 #endif
