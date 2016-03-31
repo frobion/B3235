@@ -48,56 +48,81 @@ int main(void) {
 	}
 	
 
-	// CREATION DES OBJETS PASSIFS
+	// ***** CREATION DES OBJETS PASSIFS  *****
+	
 		const char * pathname = "./Mere";
 
-	// ----- Memoire partagee Creation
+	  // ----- Memoire partagee Creation
 		
-		// ------- Parking
-		// segment de mémoire
+		// -- Memoire Parking
 		key_t cle2 = ftok(pathname, 'P');
 		int shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
+		
+		  // Attachement
+		ParkingMP* ParkingMPPtr = (ParkingMP*) shmat(shmIdParking, NULL, 0);
+		
+		  // Initialisation 
+		for(unsigned int numPlace = 0 ; numPlace < 8 ; numPlace++ )
+		{
+			ParkingMPPtr -> parking[numPlace] -> usager = AUCUN ;
+			ParkingMPPtr -> parking[numPlace] -> immatriculation = -1 ;
+			ParkingMPPtr -> parking[numPlace] -> dateArrive =  -1 ;
+		}
 
-		// -------- Requete + Compteur
-		// Segment de memoire
+		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
 		int shmIdRequete = shmget(cle3, sizeof(RequetesMP), IPC_CREAT | 0660);
 		
-		// Semaphore
+		  // Attachement
+		RequeteMP* RequeteMPPtr = (RequeteMP*) shmat(shmIdRequete, NULL, 0);
+		
+		  // Initialisation 
+		for(unsigned int numRequete = 0 ; numRequete < 3 ; numRequete++ )
+		{
+			RequeteMPPtr -> requetes[numRequete] -> usager = AUCUN ;
+			RequeteMPPtr -> requetes[numRequete] -> immatriculation = -1 ;
+			RequeteMPPtr -> requetes[numRequete] -> dateArrive =  -1 ;
+		}
+		RequeteMPPtdr -> nbPlacesOccupees = 0 ;
+		
+		
+		// -- Semaphore
 		cle2 = ftok(pathname, 'Q');
 		int semId = semget(cle2, 1,IPC_CREAT | 0660);
 		semctl(semId, 0, SETVAL, 1);
 	
-	// Creation des canaux
-	int canalEntree[3][2];
-	int canalSortie[2];
 	
-	pipe(canalEntree[0]);
-	pipe(canalEntree[1]);
-	pipe(canalEntree[2]);
-	pipe(canalSortie);
+	 // ----- Creation des canaux
+	 
+		int canalEntree[3][2];
+		int canalSortie[2];
+		
+		pipe(canalEntree[0]);
+		pipe(canalEntree[1]);
+		pipe(canalEntree[2]);
+		pipe(canalSortie);
 
-//Simulation
+// Simulation
 	if ((pidSimu = fork()) == 0)
   	{
 	Simulation(canalEntree, canalSortie);
 	}
-//Sortie
+// Sortie
 	else if ((pidSortie = fork()) == 0)
   	{
 		BarriereSortie(canalEntree, canalSortie, shmIdParking, shmIdRequete, semId);
 	}
-//Entree Blaise Prof
+// Entree Blaise Prof
 //	else if ((pidEntrees[0] = fork()) == 0)
 //   	{
 //		GestionEntree(shmDescripteur,filePlace, PROF_BLAISE_PASCAL);
 //	}
-//Entree Blaise Autre
+// Entree Blaise Autre
 //  	else if ((pidEntrees[1] = fork()) == 0)
 //    	{
 //		GestionEntree(shmDescripteur,filePlace, AUTRE_BLAISE_PASCAL);
 //	}
-//Entree Gaston Berger
+// Entree Gaston Berger
 //  	else if ((pidEntrees[2] = fork()) == 0)
 //   	{
 //		GestionEntree(shmDescripteur,filePlace, ENTREE_GASTON_BERGER);

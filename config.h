@@ -18,10 +18,10 @@ struct ParkingMP
 struct RequetesMP
 {
 	Voiture requetes [3];
-	int compteur;
+	int nbPlacesOccupees;
 };
 
 const int NUM_SEM_PARKING = 0;
-const int NUM_SEM_REQUETE_COMPTEUR = 1;
+const int NUM_SEM_REQUETE = 1;
 
 #endif
