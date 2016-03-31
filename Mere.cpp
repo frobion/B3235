@@ -87,9 +87,15 @@ int main(void) {
 		
 		
 		// -- Semaphore
-		cle2 = ftok(pathname, 'Q');
-		int semId = semget(cle2, 1,IPC_CREAT | 0660);
-		semctl(semId, 0, SETVAL, 1);
+		cle = ftok(pathname, 'Q');
+		int semId = semget(cle, 5,IPC_CREAT | 0660);
+		
+		  // Initialisation des semaphores
+		semctl(semId, NUM_SEM_PARKING, SETVAL, 1);
+		semctl(semId, NUM_SEM_REQUETE, SETVAL, 1);
+		semctl(semId, NUM_SEM_PROF_BLAISE_PASCAL, SETVAL, 0);
+		semctl(semId, NUM_SEM_AUTRE_BLAISE_PASCAL, SETVAL, 0);
+		semctl(semId, NUM_SEM_GASTON_BERGER, SETVAL, 0);
 	
 	
 	 // ----- Creation des canaux

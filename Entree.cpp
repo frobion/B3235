@@ -6,12 +6,13 @@
 #include <sys/wait.h>
 #include <sys/shm.h>
 #include <vector>
+#include <errno.h>
 
 #include "Outils.h"
+#include "config.h"
 
-//static shmP shmDescripteur;
-//static shmP shmRequete;
-//static shmP shmCompteur;
+static ParkingMP shmParking;
+static RequeteMP shmRequete;
 
 static vector<pid_t> listeFils;
 
@@ -30,9 +31,8 @@ static void HandlerUSR2 ( int noSig )
 
   // Detachement de la memoire
 
-  //shmdt(shmDescripteur.shm);
-  //shmdt(shmRequete.shm);
-  //shmdt(shmCompteur.shm);
+  shmdt(shmParking);
+  shmdt(shmRequete);
 
   exit(0);
 }
@@ -40,11 +40,40 @@ static void HandlerUSR2 ( int noSig )
 // TODO : HANDLER SIGCHLD
 
 
-void GestionEntree(TypeBarriere typeEntree)
+void GestionEntree(canalEntree[3][2],canalSortie[2], TypeBarriere typeEntree, shmIdParking, shmIdRequete, semId)
 {
     // --  INITIALISATION  --
+	
+	// Bien regarder par le nbPlaceOccupees
+	
+	
+	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
+	 int numBarriere = typeEntree -1;
+	 
+	 const struct sembuf DECR_DANS_ENTREE = {{numBarriere, -1, 0}};
+	 
+	 for(unsigned int barriereEntree = 0; barriereEntree < NB_BARRIERES_ENTREE ; barriereEntree++)
+	 {
+		 if(barriereEntree != numBarriere) 
+		 {
+			close(canalEntree[barriereEntree][0]);
+			close(canalEntree[barriereEntree][1]);
+	     }
+	     else
+	     { 
+			 close(canalEntree[barriereEntree][1]);
+		 }
+     }
+     
+     
+     for(unsigned int barriereSortie = 0; barriereSortie < NB_BARRIERES_SORTIE ; barriereSortie++)
+	 {
+		close(canalEntree[barriereSortie][0]);
+		close(canalEntree[barriereSortie][1]);
+     }
 
-    // creation des handlers de SIGUSR2
+     
+    // Creation des handlers de SIGUSR2
     struct sigaction actionHandlerUSR2;
     actionHandlerUSR2.sa_handler = HandlerUSR2;
     sigemptyset(&actionHandlerUSR2.sa_mask); // vide le masque
@@ -58,8 +87,8 @@ void GestionEntree(TypeBarriere typeEntree)
     sigemptyset(&actionHandlerCHLD.sa_mask);
     actionHandlerCHLD.sa_flags = 0;
 
-    // -- Attachement des segements de memoires partagées --     
-	 ParkingMP* RequeteMPPtr =(ParkingMP*) shmat(shmIdParking, NULL, 0);
+    // -- Attachement des segments de memoires partagées --     
+	 ParkingMP* ParkingMPPtr =(ParkingMP*) shmat(shmIdParking, NULL, 0);
 	 RequeteMP* RequeteMPPtr =(RequeteMP*) shmat(shmIdRequete, NULL, 0);
 
     // -- Armement des signaux SIGUSR2 et SIGCHILD
@@ -71,34 +100,40 @@ void GestionEntree(TypeBarriere typeEntree)
     // --  MOTEUR --
     while(true)
     {
-
-        // SI ON UTILISE UNE BOITE AU LETTRES
-          // TODO : ADAPTER POUR UN CANAL DE COMMUNICATION
-          // TODO : CREER UNE STRUCTURE VOITURE AVEC TYPE_USAGER ET TYPE_BARRIERE
-        /*
-        while(msgrcv(idFile, &MsgVoitRecue,TAILLE_MSG_VOITURE,typeEntree,0) == -1);
-        voitRecue = MsgVoitRecue.uneVoiture;
-        */
-
+		
+        Voiture voitRecue;
+        pid_t pidVoiturier;
+        
+        // On attend qu'une voiture arrive
+        while(read(canalEntree[numBarriere][0], &voitRecue , sizeof(Voiture) ) == -1 && errNo == EINTR ) ;
+		
+		// Quand une voiture arrive a une barriere
         // On dessine la voiture a la barriere
-        DessinerVoitureBarriere(voitRecue.barriere, voitRecue.usager);
+        DessinerVoitureBarriere(typeEntree, voitRecue->usager);
 
-
-        // TODO : on regarde toutes les 0.5s si il a une place de libre et des requetes
-        /*
-        while(shmDescripteur.Lire() == 0  && shmDescripteur.Lire() != 0)
+        
+        // On recupere le semaphore de Requete
+        while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
+        
+        // Si y a de une place de libre, on gare la voiture, sinon 
+        if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
-            sleep(0.5);
+			RequeteMPPtr->nbPlacesOccupees++;
+			while(semop(semId, INCR_DANS_REQUETE, 1) == -1 && errno == EINTR);
+			pidVoiturier = GarerVoiture(typeEntree);
         }
-        */
+        else
+        {
+			while(semop(semId, DECR_DANS_ENTREE, 1) == -1 && errno == EINTR);
+			pidVoiturier = GarerVoiture(typeEntree);
+		}	
+        
 
 
-        // Si il y a une place on gard la voiture
-        pid_t pidVoiturier = GarerVoiture(voitRecue.barriere);
 
 
         // on garde le pid du Voiturier
-		    listeFils.push_back(pidVoiturier);
+		listeFils.push_back(pidVoiturier);
 
 
     }
