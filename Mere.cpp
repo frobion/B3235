@@ -64,9 +64,9 @@ int main(void) {
 		  // Initialisation 
 		for(unsigned int numPlace = 0 ; numPlace < 8 ; numPlace++ )
 		{
-			ParkingMPPtr -> parking[numPlace] -> usager = AUCUN ;
-			ParkingMPPtr -> parking[numPlace] -> immatriculation = -1 ;
-			ParkingMPPtr -> parking[numPlace] -> dateArrive =  -1 ;
+			ParkingMPPtr->parking[numPlace]->usager = AUCUN ;
+			ParkingMPPtr->parking[numPlace]->immatriculation = -1 ;
+			ParkingMPPtr->parking[numPlace]->dateArrive =  -1 ;
 		}
 
 		// -- Memoire Requete + Compteur
@@ -79,11 +79,11 @@ int main(void) {
 		  // Initialisation 
 		for(unsigned int numRequete = 0 ; numRequete < 3 ; numRequete++ )
 		{
-			RequeteMPPtr -> requetes[numRequete] -> usager = AUCUN ;
-			RequeteMPPtr -> requetes[numRequete] -> immatriculation = -1 ;
-			RequeteMPPtr -> requetes[numRequete] -> dateArrive =  -1 ;
+			RequeteMPPtr->requetes[numRequete]->voiture->usager = AUCUN ;
+			RequeteMPPtr->requetes[numRequete]->voiture->immatriculation = -1 ;
+			RequeteMPPtr->requetes[numRequete]->voiture->dateArrive =  -1 ;
 		}
-		RequeteMPPtdr -> nbPlacesOccupees = 0 ;
+		RequeteMPPtdr->nbPlacesOccupees = 0 ;
 		
 		
 		// -- Semaphore
@@ -119,22 +119,22 @@ int main(void) {
 		BarriereSortie(canalEntree, canalSortie, shmIdParking, shmIdRequete, semId);
 	}
 // Entree Blaise Prof
-//	else if ((pidEntrees[0] = fork()) == 0)
-//   	{
-//		GestionEntree(shmDescripteur,filePlace, PROF_BLAISE_PASCAL);
-//	}
+	else if ((pidEntrees[0] = fork()) == 0)
+  	{
+		GestionEntree(canalEntree,canalSortie, PROF_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId)
+	}
 // Entree Blaise Autre
-//  	else if ((pidEntrees[1] = fork()) == 0)
-//    	{
-//		GestionEntree(shmDescripteur,filePlace, AUTRE_BLAISE_PASCAL);
-//	}
+  	else if ((pidEntrees[1] = fork()) == 0)
+    	{
+		GestionEntree(canalEntree,canalSortie, AUTRE_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId)
+	}
 // Entree Gaston Berger
-//  	else if ((pidEntrees[2] = fork()) == 0)
-//   	{
-//		GestionEntree(shmDescripteur,filePlace, ENTREE_GASTON_BERGER);
-//	}
-
-	else //Code Mere
+  	else if ((pidEntrees[2] = fork()) == 0)
+   	{
+		GestionEntree(canalEntree,canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId)
+	}
+// Mere
+	else 
 	{
 
 	waitpid(pidSimu, 0, 0);
