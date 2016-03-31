@@ -21,6 +21,7 @@
 //------------------------------------------------------ Include personnel
 #include "BarriereSortie.h"
 #include "config.h"
+#include "Outils.h"
 
 ///////////////////////////////////////////////////////////////////  PRIVE
 //------------------------------------------------------------- Constantes
@@ -32,7 +33,7 @@ static int semId;
 static ParkingMP* parkingMPPtr;
 static RequetesMP* requetesMPPtr;
 
-static vector<pid_t> listeVoiturierSortie;
+static std::vector<pid_t> listeVoiturierSortie;
 
 
 //------------------------------------------------------ Fonctions privées
@@ -57,12 +58,12 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   // INIT
   
   // Fermeture canaux inutilise
-  for (int i = 0; i < NB_BARRIERE_ENTREE; i++)
+  for (int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
-    close(canauxBarriereEntree[i][0];
-    close(canauxBarriereEntree[i][1];
+    close(canauxBarriereEntree[i][0]);
+    close(canauxBarriereEntree[i][1]);
   }
-  close(canalBarriereSortie[1];
+  close(canalBarriereSortie[1]);
   int descLectureCanal = canalBarriereSortie[0];
   
   // Attachement de la memoire partagee
@@ -93,10 +94,11 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   for (;;)
   {
 	read (descLectureCanal, &numeroPlace, sizeof(unsigned int));
-	listeVoiturierSortie.push(SortirVoiture(numPlace)); // Erreur (retour == -1) non gere	
+	listeVoiturierSortie.push_back(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
   }
 	
   // DESTRUCTION
   // Detachement de la MP
-  shmdt( shmAdresse);
+  shmdt(parkingMPPtr);
+  shmdt(requetesMPPtr);
 }
