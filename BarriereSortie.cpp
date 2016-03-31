@@ -32,18 +32,62 @@
 static int semId;
 static ParkingMP* parkingMPPtr;
 static RequetesMP* requetesMPPtr;
-
-static std::vector<pid_t> listeVoiturierSortie;
+static std::vector<pid_t> listeVoiturierSortie; 
 
 
 //------------------------------------------------------ Fonctions privées
 
+// Acces au semaphore deja effectue avant l'appel de cette methode
+static int chercheRequetesActuelles(Voiture* requetesActuelles)
+{
+  if (requetesMPPtr->nbPlacesOccupees != 8)
+  {
+    return 0;
+  }
+  int nbRequetesActuelles = 0;
+  for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
+  {
+    if (requetesMPPtr->requetes[i]->usager != TypeUsager::AUCUN)
+    {
+	  requetesActuelles[nbRequetesActuelles++] = requetesMPPtr->requetes[i];
+    }
+  }
+  return nbRequetesActuelles;
+}
+
 static void handlerSigChld (int noSignal)
 {
-  struct sembuf listeOperation[1];
-  listeOperation[0].sem_num = NUM_SEM_PARKING;
-  listeOperation[0].sem_op = -1;
-  semop (semId, listeOperation, 1); // Decrementation de 1 dans le semaphore Parking
+  int numeroPlaceLibere;
+  pid_t pidFilsMort = waitpid(-1, numeroPlaceLibere, 0); // Destruction du fils mort
+  
+  // Acces au semaphore de protection de parking
+  semop (semId, DECR_DANS_PARKING, 1);
+  
+  // Remise de la place dans l'etat sans voiture
+  parkingMPPtr->parking[numeroPlaceLibere]->usager = TypeUsager::AUCUN;
+  parkingMPPtr->parking[numeroPlaceLibere]->immatriculation = -1;
+  parkingMPPtr->parking[numeroPlaceLibere]->dateArrive = -1;
+  
+  // Liberation du semaphore de protection de parking
+  semop(semId, INCR_DANS_PARKING, 1); 
+  
+  Voiture requetesActuelles [3];
+  // Acces au semaphore de protection des requetes
+  semop(semId, DECR_DANS_REQUETE, 1);
+  
+  int nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
+  if (nbRequetesActuelles == 0)
+  {
+    requetesMPPtr->nbPlacesOccupees--;
+  }
+  else // Analyse des requetes, pour savoir qui doit rentrer
+  {
+    bool auMoinsUneRequetesProf = false;
+    for (int i = 0; i < nbRequetesActuelles; i++)
+    {
+	  if (
+	}
+  }
 }
 
 static void handlerSigUsr2 (int noSignal)
@@ -58,7 +102,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   // INIT
   
   // Fermeture canaux inutilise
-  for (int i = 0; i < NB_BARRIERES_ENTREE; i++)
+  for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
     close(canauxBarriereEntree[i][0]);
     close(canauxBarriereEntree[i][1]);

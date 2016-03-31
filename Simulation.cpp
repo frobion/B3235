@@ -23,7 +23,7 @@
 
 ///////////////////////////////////////////////////////////////////  PRIVE
 //------------------------------------------------------------- Constantes
-#define IMMATRICULATION_MAX 1000
+const int IMMATRICULATION_MAX 1000
 
 //------------------------------------------------------------------ Types
 
@@ -61,13 +61,13 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
   fichier << "Init simulation" << std::endl;
   
   // Fermeture de canaux en lecture (3 + 1)
-  //~ for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
-  //~ {
-    //~ close(canauxBarriereEntree[i][0]);
-    //~ descEcritureCanauxBarriereEntree[i] = canauxBarriereEntree[i][1];
-  //~ }
-  //~ close(canalBarriereSortie[0]);
-  //~ descEcritureCanalBarriereSortie = canalBarriereSortie[1];
+  for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
+  {
+    close(canauxBarriereEntree[i][0]);
+    descEcritureCanauxBarriereEntree[i] = canauxBarriereEntree[i][1];
+  }
+  close(canalBarriereSortie[0]);
+  descEcritureCanalBarriereSortie = canalBarriereSortie[1];
  
  
   // Phase moteur
@@ -95,7 +95,7 @@ void Commande (char code, unsigned int valeur)
 	  Afficher(MESSAGE, "case A");
 	  fichier << "Case 'A'" << std::endl;
 	  Voiture voiture = {TypeUsager::AUTRE, compteurImmatriculation, -1};
-	  compteurImmatriculation = (compteurImmatriculation++) % IMMATRICULATION_MAX;
+	  compteurImmatriculation = (compteurImmatriculation + 1) % IMMATRICULATION_MAX;
       if (valeur == 1)
       {		
         write(descEcritureCanauxBarriereEntree[AUTRE_BLAISE_PASCAL - 1], &voiture, sizeof(Voiture));
@@ -111,7 +111,7 @@ void Commande (char code, unsigned int valeur)
 	  Afficher(MESSAGE, "case P");
 	  fichier << "Case 'P'" << std::endl;
       Voiture voiture = {TypeUsager::PROF, compteurImmatriculation, -1};
-      compteurImmatriculation = (compteurImmatriculation++) % IMMATRICULATION_MAX;
+      compteurImmatriculation = (compteurImmatriculation + 1) % IMMATRICULATION_MAX;
       if (valeur == 1)
       {
         write(descEcritureCanauxBarriereEntree[PROF_BLAISE_PASCAL - 1], &voiture, sizeof(Voiture));
