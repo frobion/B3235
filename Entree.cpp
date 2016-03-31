@@ -1,13 +1,13 @@
-#include <signal.h>
-#include <unistd.h>
 #include <sys/msg.h>
-#include <algorithm>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/shm.h>
 #include <vector>
+#include <algorithm>
 #include <errno.h>
 #include <time.h>
+#include <signal.h>
+#include <unistd.h>
 
 #include "Entree.h"
 #include "Outils.h"
@@ -18,6 +18,8 @@ static RequeteMP* RequeteMPPtr;
 
 static vector<pid_t> listeFils;
 
+const struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
+const struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
 static struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
 static struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
 static struct sembuf DECR_DANS_ENTREE [1];
@@ -45,6 +47,12 @@ static void HandlerUSR2 ( int noSig )
 
 static void HandlerCHLD(int noSig)
 {
+	int numPlace;
+	waitpid(-1 ,&numPlace,0);
+	while(semop(semId, DECR_DANS_PARKING, 1) == -1 && errno == EINTR);
+	ParkingMPPtdr->parking[numPlace] = voitRecue;
+	AfficherPlace(numPlace, voitRecue.usager, voitRecue.immatriculation, voitRecue.dateArrive);
+	while(semop(semId, INCR_DANS_PARKING, 1) == -1 && errno == EINTR);	
 	
 }
 
@@ -128,7 +136,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         // On recupere le semaphore de Requete
         while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
         
-        // Si y a de une place de libre on gare la voiture, sinon on emet une requete et on attend
+        // Si y a de une place de libre on gare la voiture, sinon on emet une requete et on attend qu'une place ce libere
         if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
 			RequeteMPPtr->nbPlacesOccupees++;
@@ -139,6 +147,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         {
 			RequeteMPPtr->requetes[numBarriere].voiture = voitRecue;
 			RequeteMPPtr->requetes[numBarriere].barriere = typeEntree;
+			AfficherRequete(typeEntree, voitRecue.usager, heureArrivee);
 			while(semop(semId, DECR_DANS_ENTREE, 1) == -1 && errno == EINTR);
 			pidVoiturier = GarerVoiture(typeEntree);
 		}	
