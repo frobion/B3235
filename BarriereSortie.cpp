@@ -39,14 +39,14 @@ static RequeteMP* requeteMPPtr;
 static std::set<pid_t> listeVoiturierSortie;
 static int descLectureCanal;
 
-static struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
-static struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
-static struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
-static struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
+static struct sembuf incrSemParking [1] = {{NUM_SEM_PARKING, 1, 0}};
+static struct sembuf decrSemParking [1] = {{NUM_SEM_PARKING, -1, 0}};
+static struct sembuf incrSemRequete [1] = {{NUM_SEM_REQUETE, 1, 0}};
+static struct sembuf decrSemRequete [1] = {{NUM_SEM_REQUETE, -1, 0}};
 
-static struct sembuf INCR_DANS_PROF_BLAISE_PASCAL [1] = {{NUM_SEM_PROF_BLAISE_PASCAL, 1, 0}};
-static struct sembuf INCR_DANS_AUTRE_BLAISE_PASCAL [1] = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
-static struct sembuf INCR_DANS_GASTON_BERGER [1] = {{NUM_SEM_GASTON_BERGER, 1, 0}};
+static struct sembuf incrSemProfBlaisePascal [1] = {{NUM_SEM_PROF_BLAISE_PASCAL, 1, 0}};
+static struct sembuf incrSemAutreBlaisePascal [1] = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
+static struct sembuf incrSemGastonBerger [1] = {{NUM_SEM_GASTON_BERGER, 1, 0}};
 
 
 //------------------------------------------------------ Fonctions privées
@@ -95,7 +95,7 @@ static void handlerSigChld (int noSignal)
   listeVoiturierSortie.erase(pidFilsMort);
   
   // Acces au semaphore de protection de parking
-  while(semop (semId, DECR_DANS_PARKING, 1) == -1 && errno == EINTR);
+  while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
   
   // Remise de la place dans l'etat sans voiture
   AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere].usager, parkingMPPtr->parking[numeroPlaceLibere].immatriculation, 
@@ -104,14 +104,14 @@ static void handlerSigChld (int noSignal)
   Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
-  semop(semId, INCR_DANS_PARKING, 1);
+  semop(semId, incrSemParking, 1);
   
   
   
   Requete requetesActuelles [NB_BARRIERES_ENTREE];
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
-  while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
+  while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
   
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
   
@@ -130,7 +130,7 @@ static void handlerSigChld (int noSignal)
 	{
 	  case PROF_BLAISE_PASCAL:
 	    // Reveil de la tache entree correspondante
-	    semop (semId, INCR_DANS_PROF_BLAISE_PASCAL, 1);
+	    semop (semId, incrSemProfBlaisePascal, 1);
 	    // Reinitilisation de la MP pour la requete correspondante
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::PROF_BLAISE_PASCAL - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::PROF_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
@@ -138,13 +138,13 @@ static void handlerSigChld (int noSignal)
 	    Effacer(TypeZone::REQUETE_R1);
 	    break;
 	  case AUTRE_BLAISE_PASCAL:
-	    semop(semId, INCR_DANS_AUTRE_BLAISE_PASCAL, 1);
+	    semop(semId, incrSemAutreBlaisePascal, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
 	    Effacer(TypeZone::REQUETE_R2);
 	    break;
 	  case ENTREE_GASTON_BERGER:
-	    semop(semId, INCR_DANS_GASTON_BERGER, 1);
+	    semop(semId, incrSemGastonBerger, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].barriere	 = TypeBarriere::AUCUNE;
 	    Effacer(TypeZone::REQUETE_R3);
@@ -154,11 +154,12 @@ static void handlerSigChld (int noSignal)
 	    break;
 	}
   }
-  semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
+  semop(semId, incrSemRequete, 1); // Liberation du semaphore de protection des requetes
 }
 
 static void handlerSigUsr2 (int noSignal)
 {
+  Afficher(TypeZone::MESSAGE, "SIGUSR2 recu par sortie");
   close(descLectureCanal);
   
   shmdt(parkingMPPtr);

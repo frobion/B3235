@@ -23,13 +23,13 @@ int main(void) {
 	// XTERM par défaut
 	InitialiserApplication (XTERM);
 	
-	// Blocage des signaux 
-	sigset_t listeSignalBloque;
-    sigemptyset(&listeSignalBloque);
-    sigaddset(&listeSignalBloque, SIGUSR1);
-    sigaddset(&listeSignalBloque, SIGUSR2);
-    sigaddset(&listeSignalBloque, SIGCHLD);
-    sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
+	//~ // Blocage des signaux 
+	//~ sigset_t listeSignalBloque;
+    //~ sigemptyset(&listeSignalBloque);
+    //~ sigaddset(&listeSignalBloque, SIGUSR1);
+    //~ sigaddset(&listeSignalBloque, SIGUSR2);
+    //~ sigaddset(&listeSignalBloque, SIGCHLD);
+    //~ sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
 
 	//Liste des ID Processus
 	pid_t pidHeure;         //Heure
@@ -139,6 +139,7 @@ int main(void) {
 	waitpid(pidSimu, 0, 0);
 
 	// Destruction des processus fils
+	Afficher(TypeZone::MESSAGE, pidSortie);
 	kill(pidSortie, SIGUSR2);
 	waitpid(pidSortie, 0, 0);
 	Afficher(MESSAGE,"FIN sortie");
