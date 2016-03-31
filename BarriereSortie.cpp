@@ -40,7 +40,7 @@ static std::vector<pid_t> listeVoiturierSortie;
 //------------------------------------------------------ Fonctions privées
 
 // Acces au semaphore deja effectue avant l'appel de cette methode
-static int chercheRequetesActuelles(Voiture* requetesActuelles)
+static int chercheRequetesActuelles(Requete* requetesActuelles)
 {
   if (requetesMPPtr->nbPlacesOccupees != NB_PLACES)
   {
@@ -49,7 +49,7 @@ static int chercheRequetesActuelles(Voiture* requetesActuelles)
   int nbRequetesActuelles = 0;
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
-    if (requetesMPPtr->requetes[i]->usager != TypeUsager::AUCUN)
+    if (requetesMPPtr->requetes[i]->voiture->usager != TypeUsager::AUCUN)
     {
 	  requetesActuelles[nbRequetesActuelles++] = requetesMPPtr->requetes[i];
     }
@@ -57,21 +57,21 @@ static int chercheRequetesActuelles(Voiture* requetesActuelles)
   return nbRequetesActuelles;
 }
 
-// Renvoie true si r1 autant ou plus prioritaire que r2, false sinon
-static bool comparePrioriteRequetes(Voiture* r1, indiceR1, Voiture* r2, indiceR2)
+// Renvoie r1 si r1 autant ou plus prioritaire que r2, r2 sinon
+static *Requete comparePrioriteRequetes(Requete* r1, Requete* r2)
 {
-  if (r1->usager == TypeUsager::PROF && r2->usager == TypeUsager::AUTRE)
+  if (r1->voiture->usager != r2->voiture->usager)
   {
-	return true;
+	return (r1->voiture->usager == TypeUsager::PROF) ? r1 : r2;
   }
-  else if (r1->usager == TypeUsager::AUTRE && r2->usager == TypeUsager::PROF)
-  {
-	return false;
-  }
-  else
-  {
-	return (r1->dateArrive <= r2->dateArrive);
-  }
+  return (*r1->voiture->dateArrive <= *r2->voiture->dateArrive) ? r1 : r2;
+}
+
+static void initVoiture(Voiture* voiture)
+{
+  *voiture->usager = TypeUsager::AUCUN;
+  *voiture->immatriculation = -1;
+  *voiture->dateArrive = -1;
 }
 
 static void handlerSigChld (int noSignal)
@@ -84,52 +84,49 @@ static void handlerSigChld (int noSignal)
   semop (semId, DECR_DANS_PARKING, 1);
   
   // Remise de la place dans l'etat sans voiture
-  parkingMPPtr->parking[numeroPlaceLibere]->usager = TypeUsager::AUCUN;
-  parkingMPPtr->parking[numeroPlaceLibere]->immatriculation = -1;
-  parkingMPPtr->parking[numeroPlaceLibere]->dateArrive = -1;
+  initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere]);
   
   // Liberation du semaphore de protection de parking
   semop(semId, INCR_DANS_PARKING, 1); 
   
-  Voiture requetesActuelles [NB_BARRIERES_ENTREE];
+  Requete requetesActuelles [NB_BARRIERES_ENTREE];
+  int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
   semop(semId, DECR_DANS_REQUETE, 1);
   
-  int nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
+  nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
   
   if (nbRequetesActuelles == 0)
   {
     requetesMPPtr->nbPlacesOccupees--;
-    semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
   }
   else // Analyse des requetes, pour savoir qui doit rentrer
   {
-	semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
-	
-	Voiture meilleurRequetes;
-    bool auMoinsUneRequetesProf = false;
-    unsigned int tempsArriveMin = UINT_MAX;
-    unsigned int tempsArriveMinProf = UINT_MAX;
-    for (int i = 0; i < nbRequetesActuelles; i++)
-    {
-	  if (requetesActuelles[i]->usager == TypeUsager::PROF)
-	  {
-        auMoinsUneRequetesProf = true;
-        if (requetesActuelles[i]->dateArrive < tempsArriveMinProf)
-        {
-		  tempsArriveMinProf = requetesActuelles[i]->dateArrive;
-		  meilleurRequetes = requetesActuelles[i];
-	    }
-	  }
-	  // Si un prof est la, la meilleur requetes a forcement ete mise a jour dans la partie prof
-	  if (!auMoinsUneRequetesProf && requetesActuelles[i]->dateArrive < tempsArriveMin)
-	  {
-		tempsArriveMin = requetesActuelles[i]->dateArrive;
-		meilleurRequetes = requetesActuelles[i];
-      }
+	Requete meilleurRequete = (nbRequetesActuelles == 1) ? requetesActuelles[0] : *comparePrioriteRequetes(&requetesActuelles[0], &requetesActuelles[1]);
+	for (int i = 2; i < nbRequetesActuelles; i++)
+	{
+	  meilleurRequete = *comparePrioriteRequetes(meilleurRequete, requetesActuelles[i]);
 	}
-	
+	switch(meilleurRequete->barriere)
+	{
+	  case PROF_BLAISE_PASCAL:
+	    semop (semId, INCR_DANS_PROF_BLAISE_PASCAL, 1);
+	    initVoiture(&(requetesMPPtr->requetes[TypeBarriere::PROF_BLAISE_PASCAL - 1]));
+	    break;
+	  case AUTRE_BLAISE_PASCAL:
+	    semop(semId, INCR_DANS_AUTRE_BLAISE_PASCAL, 1);
+	    initVoiture(&(requetesMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1]));
+	    break;
+	  case ENTREE_GASTON_BERGER:
+	    semop(semId, INCR_DANS_GASTON_BERGER, 1);
+	    initVoiture(&(requetesMPPtr->requetes[TypeBarriere::GASTON_BERGER - 1]));
+	    break;
+	  default:
+	    Afficher(TypeZone::MESSAGE, "Mauvaise barriere, handler SIGCHLD, barriereSortie");
+	    break;
+	}
   }
+  semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
 }
 
 static void handlerSigUsr2 (int noSignal)
