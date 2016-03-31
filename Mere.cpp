@@ -140,20 +140,20 @@ int main(void) {
 
 	// Destruction des processus fils
 	kill(pidSortie, SIGUSR2);
-	Afficher(MESSAGE,"FIN sortie");
 	waitpid(pidSortie, 0, 0);
+	Afficher(MESSAGE,"FIN sortie");
 
 	kill(pidEntrees[0], SIGUSR2);
-	Afficher(MESSAGE,"FIN Entree Blaise Prof");
 	waitpid(pidEntrees[0], 0, 0);
+	Afficher(MESSAGE,"FIN Entree Blaise Prof");
 
 	kill(pidEntrees[1], SIGUSR2);
-	Afficher(MESSAGE,"FIN Entree Blaise Autres");
 	waitpid(pidEntrees[1], 0, 0);
+	Afficher(MESSAGE,"FIN Entree Blaise Autres");
 
 	kill(pidEntrees[2], SIGUSR2);
-	Afficher(MESSAGE,"FIN Entree Gaston Berger");
 	waitpid(pidEntrees[2], 0, 0);
+	Afficher(MESSAGE,"FIN Entree Gaston Berger");
 
 	Effacer(MESSAGE);
 
