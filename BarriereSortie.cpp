@@ -17,7 +17,7 @@
 #include <sys/shm.h>
 #include <sys/wait.h>
 #include <unistd.h>
-#include <vector>
+#include <set>
 #include <limits.h>
 #include <errno.h>
 
@@ -36,7 +36,7 @@
 static int semId;
 static ParkingMP* parkingMPPtr;
 static RequeteMP* requeteMPPtr;
-static std::vector<pid_t> listeVoiturierSortie; 
+static std::set<pid_t> listeVoiturierSortie; 
 
 static struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
 static struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
@@ -91,6 +91,7 @@ static void handlerSigChld (int noSignal)
   // TODO: time
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
+  listeVoiturierSortie.erase(pidFilsMort);
   
   // Acces au semaphore de protection de parking
   semop (semId, DECR_DANS_PARKING, 1);
@@ -189,7 +190,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   for (;;)
   {
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
-	listeVoiturierSortie.push_back(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
+	listeVoiturierSortie.insert(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
   }
 	
   // DESTRUCTION
