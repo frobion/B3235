@@ -15,7 +15,7 @@ EDLFLAGS = $(LIB)
 #Fichiers
 
 SRC =
-INT = Mere.h Simulation.h  #Mettre les .h ici
+INT = Mere.h Simulation.h  BarriereSortie.h #Mettre les .h ici
 REAL = $(INT:.h=.cpp)
 OBJ = $(INT:.h=.o) Mere.o #Mettre le .o du programme de test la où ya le main
 
@@ -33,8 +33,9 @@ $(EXE): $(OBJ)
 %.o:%.cpp
 	$(COMP) -c $(CPPFLAGS) $<
 
-Mere.cpp:Mere.h Simulation.h
-Simulation.cpp:Simulation.h
+Mere.cpp:Mere.h Simulation.h config.h
+Simulation.cpp:Simulation.h config.h
+BarriereSortie.cpp:BarriereSortie.h config.h
 
 clean:
 	$(RM) -fv *.o $(EXE)
