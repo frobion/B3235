@@ -1,14 +1,17 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#include "Outils.h"
+
+#include <ctime>
 #include <sys/sem.h>
+
+#include "Outils.h"
 
 struct Voiture
 {
   TypeUsager usager;
   int immatriculation;
-  int dateArrive;
+  time_t dateArrive;
 };
 
 struct Requete
