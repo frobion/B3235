@@ -23,6 +23,6 @@
 
 /////////////////////////////////////////////////////////////////// PUBLIC
 //---------------------------------------------------- Fonctions publiques
-void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[]);
+void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmId, int semId);
 
 #endif // BARRIERE_SORTIE_H

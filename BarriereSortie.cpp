@@ -20,7 +20,7 @@ static void handlerSigUsr2 (int noSignal)
   
 }
 
-void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int semId, int shmId)
+void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmId, int semId)
 {
   // INIT
   // Blocage SIGUSR1, SIGUSR2, SIGCHLD
