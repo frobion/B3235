@@ -15,7 +15,7 @@ EDLFLAGS = $(LIB)
 #Fichiers
 
 SRC =
-INT = Mere.h Simulation.h  BarriereSortie.h #Mettre les .h ici
+INT = Mere.h Simulation.h  BarriereSortie.h Entree.h #Mettre les .h ici
 REAL = $(INT:.h=.cpp)
 OBJ = $(INT:.h=.o) Mere.o #Mettre le .o du programme de test la où ya le main
 

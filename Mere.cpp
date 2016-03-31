@@ -121,17 +121,17 @@ int main(void) {
 // Entree Blaise Prof
 	else if ((pidEntrees[0] = fork()) == 0)
   	{
-		GestionEntree(canalEntree,canalSortie, PROF_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
+		GestionEntree(canalEntree, canalSortie, PROF_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
 	}
 // Entree Blaise Autre
   	else if ((pidEntrees[1] = fork()) == 0)
     	{
-		GestionEntree(canalEntree,canalSortie, AUTRE_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
+		GestionEntree(canalEntree, canalSortie, AUTRE_BLAISE_PASCAL, shmIdParking, shmIdRequete, semId);
 	}
 // Entree Gaston Berger
   	else if ((pidEntrees[2] = fork()) == 0)
    	{
-		GestionEntree(canalEntree,canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId);
+		GestionEntree(canalEntree, canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId);
 	}
 // Mere
 	else 

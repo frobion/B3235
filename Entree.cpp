@@ -78,7 +78,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
     actionHandlerUSR2.sa_handler = HandlerUSR2;
     sigemptyset(&actionHandlerUSR2.sa_mask); // vide le masque
     actionHandlerUSR2.sa_flags = 0;
-    // HandlerSIGUSR2 ne doit pas etre interrompu par SIGCHLD
+       // HandlerSIGUSR2 ne doit pas etre interrompu par SIGCHLD
     sigaddset(&actionHandlerUSR2.sa_mask, SIGCHLD);
 
     // creation des handlers de SIGCHLD
@@ -117,7 +117,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         // On recupere le semaphore de Requete
         while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
         
-        // Si y a de une place de libre, on gare la voiture, sinon 
+        // Si y a de une place de libre on gare la voiture, sinon on emet une requete et on attend
         if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
 			RequeteMPPtr->nbPlacesOccupees++;
