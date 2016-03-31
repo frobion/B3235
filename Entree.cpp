@@ -50,7 +50,6 @@ void GestionEntree(TypeBarriere typeEntree)
     sigemptyset(&actionHandlerUSR2.sa_mask); // vide le masque
     actionHandlerUSR2.sa_flags = 0;
     // HandlerSIGUSR2 ne doit pas etre interrompu par SIGCHLD
-    // On ajoute donc SIGCHLD aux signals masquees
     sigaddset(&actionHandlerUSR2.sa_mask, SIGCHLD);
 
     // creation des handlers de SIGCHLD
@@ -59,21 +58,11 @@ void GestionEntree(TypeBarriere typeEntree)
     sigemptyset(&actionHandlerCHLD.sa_mask);
     actionHandlerCHLD.sa_flags = 0;
 
-    // -- Attachement memoire partagée --
-        // Si le pointeur vers l'espace d'adressage est null, alors ca prend la 1ere dispo
-        // ------- shmDescripteur
-    shmDescripteur = p_ShmDescripteur;
-	  shmDescripteur.shm =(int*)shmat(shmDescripteur.idShm, NULL, SHM_RDONLY);
-  /*
-        // ------- shmRequete
-    shmRequete = p_ShmRequete;
-    shmRequete.shm =(int*)shmat(shmRequete.idShm, NULL, SHM_RDONLY);
-        // ------- shmCompteur
-    shmCompteur = p_ShmCompteur;
-    shmCompteur.shm =(int*)shmat(shmCompteur.idShm, NULL, SHM_RDONLY);
-*/
+    // -- Attachement des segements de memoires partagées --     
+	 ParkingMP* RequeteMPPtr =(ParkingMP*) shmat(shmIdParking, NULL, 0);
+	 RequeteMP* RequeteMPPtr =(RequeteMP*) shmat(shmIdRequete, NULL, 0);
 
-    // Armement des signaux SIGUSR2 et SIGCHILD
+    // -- Armement des signaux SIGUSR2 et SIGCHILD
     sigaction(SIGUSR2, &actionHandlerUSR2, NULL);
     sigaction(SIGCHLD, &actionHandlerCHLD, NULL);
 

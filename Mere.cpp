@@ -14,6 +14,7 @@
 
 #include "Simulation.h"
 #include "Entree.h"
+#include "BarriereSortie.h"
 
 
 int main(void) {
@@ -21,6 +22,14 @@ int main(void) {
 	// VT220 Si SSH
 	// XTERM par défaut
 	InitialiserApplication (XTERM);
+	
+	// Blocage des signaux 
+	sigset_t listeSignalBloque;
+    sigemptyset(&listeSignalBloque);
+    sigaddset(&listeSignalBloque, SIGUSR1);
+    sigaddset(&listeSignalBloque, SIGUSR2);
+    sigaddset(&listeSignalBloque, SIGCHLD);
+    sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
 
 	//Liste des ID Processus
 	pid_t pidHeure;         //Heure
@@ -29,73 +38,54 @@ int main(void) {
 	pid_t pidSortie; 		//Sortie
 
 
-	// CREATION DES OBJETS PASSIFS
-		const char * pathname = "./Mere";
-
-	//Memoire partagee Creation
-
-		// -------- Descripteur
-		//shmP shmDescripteur;
-
-					// Création du segment de mémoire
-						// Genere cle en fct du chemin vers le fichier
-						// Le 2nd param : caractere pour differencier les differentes cles
-		key_t cle2 = ftok(pathname, 'P');
-		//shmDescripteur.idShm = shmget(cle2, sizeof(int) * 2 + sizeof(TypeUsager) + sizeof(time_t), IPC_CREAT | 0660);
-
-					// Création du semaphore
-		cle2 = ftok(pathname, 'Q');
-		//shmDescripteur.idMutex = semget(cle2, 1,IPC_CREAT | 0660);
-					// Initialisation du sémaphore
-		//semctl(shmDescripteur.idMutex, 0, SETVAL, 1);
-
-/*
-		// -------- Requete
-		shmP shmRequete;
-				// Segment de memoire
-		key_t cle3 = ftok(pathname, 'R');
-		shmRequete.idShm = shmget(cle3, sizeof(TypeUsager) + sizeof(time_t), IPC_CREAT | 0660);
-				// Semaphore
-		cle3 = ftok(pathname, 'S');
-		shmRequete.idMutex = semget(cle3, 1,IPC_CREAT | 0660);
-		semctl(shmRequete.idMutex, 0, SETVAL, 1);
-
-		// -------- Compteur
-		shmP shmCompteur;
-				// Segment de memoire
-		key_t cle4 = ftok(pathname, 'T');
-		shmCompteur.idShm = shmget(cle4, sizeof(int), IPC_CREAT | 0660);
-				// Semaphore
-		cle4 = ftok(pathname, 'U');
-		shmCompteur.idMutex = semget(cle4, 1,IPC_CREAT | 0660);
-		semctl(shmCompteur.idMutex, 0, SETVAL, 1);
-*/
-
 	//Heure : Creation
 	pidHeure = ActiverHeure();
-	if (pidHeure == -1) // Gestion des erreurs sur creation d'Heure
-  {
+	if (pidHeure == -1)
+	{
 		TerminerApplication(false);
 		exit(0);
 	}
+	
 
+	// CREATION DES OBJETS PASSIFS
+		const char * pathname = "./Mere";
+
+	// ----- Memoire partagee Creation
+		
+		// ------- Parking
+		// segment de mémoire
+		key_t cle2 = ftok(pathname, 'P');
+		shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
+
+		// -------- Requete + Compteur
+		// Segment de memoire
+		key_t cle3 = ftok(pathname, 'R');
+		shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
+		
+		// Semaphore
+		cle2 = ftok(pathname, 'Q');
+		semId = semget(cle2, 1,IPC_CREAT | 0660);
+		semctl(semId, 0, SETVAL, 1);
+	
+	// Creation des canaux
+	int canalEntree[3][2];
+	int canalSortie[2]
+	
+	pipe(canalEntree[0]);
+	pipe(canalEntree[1]);
+	pipe(canalEntree[2]);
+	pipe(canalSortie);
 
 //Simulation
 	if ((pidSimu = fork()) == 0)
   	{
-		// Fonction faite par Francois
-    int a [3][2];
-    int b [2];
-	Simulation(a, b);
-    //delete [] a;
-    //delete [] b;
+	Simulation(canalEntree, canalSortie);
 	}
 //Sortie
-//	else if ((pidSortie = fork()) == 0)
-//  	{
-//		// Fonction faite par Francois
-//		GestionSortie();
-//	}
+	else if ((pidSortie = fork()) == 0)
+  	{
+		BarriereSortie(canalEntree, canalSortie, shmIdParking, shmIdRequete, semId);
+	}
 //Entree Blaise Prof
 //	else if ((pidEntrees[0] = fork()) == 0)
 //   	{
@@ -136,6 +126,7 @@ int main(void) {
 
 	Effacer(MESSAGE);
 
+
 	//Heure : Destruction
 	kill(pidHeure, SIGUSR2);
 	Afficher(MESSAGE,"Suppression heure");
@@ -144,29 +135,15 @@ int main(void) {
 
 	//Memoire partagee  : Destruction
 
-				// ----- Descripteur
-	Afficher(MESSAGE,"Suppression memoire descripteur");
-	//shmctl(shmDescripteur.idShm, IPC_RMID, 0);
+		// Destruction Semaphore
+    Afficher(MESSAGE,"Suppression semaphore");
+	semctl(semId, 0, IPC_RMID, 0);
+	
+	Afficher(MESSAGE,"Suppression memoire Requete");
+	shmctl(shmIdRequete, IPC_RMID, 0);
 
-	Afficher(MESSAGE,"Suppression semaphore descripteur");
-	//semctl(shmDescripteur.idMutex, 0, IPC_RMID, 0);
-
-	/*
-				// ----- Requete
-	Afficher(MESSAGE,"Suppression memoire requete");
-	shmctl(shmRequete.idShm, IPC_RMID, 0);
-
-	Afficher(MESSAGE,"Suppression semaphore requete");
-	semctl(shmRequete.idMutex, 0, IPC_RMID, 0);
-
-				// ----- Compteur
-	Afficher(MESSAGE,"Suppression memoire compteur");
-	shmctl(shmCompteur.idShm, IPC_RMID, 0);
-
-	Afficher(MESSAGE,"Suppression semaphore compteur");
-	semctl(shmCompteur.idMutex, 0, IPC_RMID, 0);
-
-*/
+	Afficher(MESSAGE,"Suppression memoire Parking");
+	shmctl(shmIdParking, IPC_RMID, 0);
 
 
 	// true pour les tests, false pour la version finale
