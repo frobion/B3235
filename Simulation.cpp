@@ -38,11 +38,11 @@ static fstream fichier("LogSimulation.txt");
 static void destruction()
 {
   // Fermeture canaux (3 + 1)
-  //~ for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
-  //~ {
-    //~ close(descEcritureCanauxBarriereEntree[i]);
-  //~ }
-  //~ close(descEcritureCanalBarriereSortie);
+  for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
+  {
+    close(descEcritureCanauxBarriereEntree[i]);
+  }
+  close(descEcritureCanalBarriereSortie);
   
   //delete simulation;
   fichier.close();
