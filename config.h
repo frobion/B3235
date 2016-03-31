@@ -21,7 +21,7 @@ struct RequetesMP
 	int compteur;
 };
 
-const int numSemParking = 0;
-const int numSemRequeteCompteur = 1;
+const int NUM_SEM_PARKING = 0;
+const int NUM_SEM_REQUETE_COMPTEUR = 1;
 
 #endif

@@ -1,18 +1,48 @@
-#include "BarriereSortie.h"
-#include "config.h"
+/*************************************************************************
+                           BarriereSortie  -  description
+                             -------------------
+    début                : 23/03/2016
+    copyright            : (C) 2016 par frobion
+    e-mail               : francois.robion@insa-lyon.fr
+*************************************************************************/
 
+//---------- Réalisation de la tâche <BarriereSortie> (fichier BarriereSortie.cpp)
+
+/////////////////////////////////////////////////////////////////  INCLUDE
+//-------------------------------------------------------- Include système
 #include <signal.h>
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
 #include <sys/shm.h>
 #include <unistd.h>
+#include <vector>
 
-static int descLectureCanal;
+//------------------------------------------------------ Include personnel
+#include "BarriereSortie.h"
+#include "config.h"
+
+///////////////////////////////////////////////////////////////////  PRIVE
+//------------------------------------------------------------- Constantes
+
+//------------------------------------------------------------------ Types
+
+//---------------------------------------------------- Variables statiques
+static int semId;
+static ParkingMP* parkingMPPtr;
+static RequetesMP* requetesMPPtr;
+
+static vector<pid_t> listeVoiturierSortie;
+
+
+//------------------------------------------------------ Fonctions privées
 
 static void handlerSigChld (int noSignal)
 {
-  
+  struct sembuf listeOperation[1];
+  listeOperation[0].sem_num = NUM_SEM_PARKING;
+  listeOperation[0].sem_op = -1;
+  semop (semId, listeOperation, 1); // Decrementation de 1 dans le semaphore Parking
 }
 
 static void handlerSigUsr2 (int noSignal)
@@ -20,30 +50,27 @@ static void handlerSigUsr2 (int noSignal)
   
 }
 
-void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmId, int semId)
+//////////////////////////////////////////////////////////////////  PUBLIC
+//---------------------------------------------------- Fonctions publiques
+void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmParkingId, int shmRequeteId int semIdParam)
 {
   // INIT
-  // Blocage SIGUSR1, SIGUSR2, SIGCHLD
-  sigset_t listeSignalBloque;
-  sigemptyset(&listeSignalBloque);
-  sigaddset(&listeSignalBloque, SIGUSR1);
-  sigaddset(&listeSignalBloque, SIGUSR2);
-  sigaddset(&listeSignalBloque, SIGCHLD);
-  
-  sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
   
   // Fermeture canaux inutilise
-  //~ for (int i = 0; i < NB_BARRIERE_ENTREE; i++)
-  //~ {
-    //~ close(canauxBarriereEntree[i][0];
-    //~ close(canauxBarriereEntree[i][1];
-  //~ }
-  //~ close(canalBarriereSortie[1];
-  //~ descLectureCanal = canalBarriereSortie[0];
+  for (int i = 0; i < NB_BARRIERE_ENTREE; i++)
+  {
+    close(canauxBarriereEntree[i][0];
+    close(canauxBarriereEntree[i][1];
+  }
+  close(canalBarriereSortie[1];
+  int descLectureCanal = canalBarriereSortie[0];
   
   // Attachement de la memoire partagee
-  void * shmAdresse = shmat(shmId, 	NULL, 0);
+  parkingMPPtr = (ParkingMP*) shmat(shmParkingId, NULL, 0);
+  requetesMPPtr = (RequetesMP*) shmat(shmRequeteId, NULL, 0);
   
+  // Recuperer id du semaphore
+  semId = semIdParam;
   
   // Creer et associer handler SIGCHLD
   struct sigaction actionCHLD;
@@ -62,17 +89,11 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   
   // MOTEUR
   unsigned int numeroPlace;
-  struct sembuf listeOperation[1];
   
   for (;;)
   {
 	read (descLectureCanal, &numeroPlace, sizeof(unsigned int));
-	listeOperation[0].sem_num = numSemParking;
-	listeOperation[0].sem_op = -1; 
-	semop (semId, listeOperation, 1); // Decrementation de 1 dans le semaphore
-	// lecture MP
-	
-	
+	listeVoiturierSortie.push(SortirVoiture(numPlace)); // Erreur (retour == -1) non gere	
   }
 	
   // DESTRUCTION

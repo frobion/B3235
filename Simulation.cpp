@@ -52,14 +52,6 @@ static void destruction()
 //////////////////////////////////////////////////////////////////  PUBLIC
 //---------------------------------------------------- Fonctions publiques
 
-
-
-
-
-
-
-
-
 void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
 {
   // TODO INIT
@@ -67,15 +59,6 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
   compteurImmatriculation = 0;
   // Ouverture fichier (log)
   fichier << "Init simulation" << std::endl;
-  
-  // Blocage SIGUSR1, SIGUSR2, SIGCHLD
-  sigset_t listeSignalBloque;
-  sigemptyset(&listeSignalBloque);
-  sigaddset(&listeSignalBloque, SIGUSR1);
-  sigaddset(&listeSignalBloque, SIGUSR2);
-  sigaddset(&listeSignalBloque, SIGCHLD);
-  
-  sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
   
   // Fermeture de canaux en lecture (3 + 1)
   //~ for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
@@ -93,8 +76,6 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
     Menu();
   }
 }
-
-
 
 void Commande (char code, unsigned int valeur)
 {
