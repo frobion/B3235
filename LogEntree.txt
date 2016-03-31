@@ -1,0 +1,282 @@
+1 : Init Entree
+1 : debut boucle infini
+0 : Init Entree
+0 : debut boucle infini
+2 : Init Entree
+0 : Une voiture est arrivee et heure attribue : 6091
+2 : debut boucle infini
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 0
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6092
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 1
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6093
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 2
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6094
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 3
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6095
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 4
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6096
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 5
+0 : Liberation semaphore requete
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6097
+0 : Appel SIGCHLD
+0 : num place : 4
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier 16104
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6097
+2 : Une voiture est arrivee et heure attribue : 6098
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier 16105
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6098
+2 : Demande du semaphore requete
+2 : Recup semaphore requete
+2 : nbPlaceOccupe 6092
+2 : Requete barriere 3
+2 : Liberation semaphore requete
+2 : Demande semaphore entree
+2 : Recup semaphore entree
+2 : pidVoiturier -1
+2 : debut boucle infini
+0 : Appel SIGCHLD
+0 : num place : 3
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6099
+0 : Appel SIGCHLD
+0 : num place : 1
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6100
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6101
+0 : Appel SIGCHLD
+0 : num place : 2
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6101
+0 : Appel SIGCHLD
+0 : num place : 5
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6101
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6102
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6103
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6104
+0 : Appel SIGCHLD
+0 : num place : 8
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6105
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6106
+0 : Appel SIGCHLD
+0 : num place : 7
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6106
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6107
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6108
+0 : Appel SIGCHLD
+0 : num place : 6
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6109
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6110
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6111
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6092
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6112
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6091
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier 16107
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6113
+0 : Demande du semaphore requete
+0 : Recup semaphore requete
+0 : nbPlaceOccupe 6091
+0 : Requete barriere 1
+0 : Liberation semaphore requete
+0 : Demande semaphore entree
+0 : Recup semaphore entree
+0 : pidVoiturier -1
+0 : debut boucle infini
+0 : Une voiture est arrivee et heure attribue : 6114
+0 : Appel SIGUSR2
+1 : Appel SIGUSR2
+2 : Appel SIGUSR2

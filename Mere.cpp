@@ -8,6 +8,9 @@
 #include <unistd.h>
 #include <signal.h>
 
+#include <iostream>
+#include <fstream>
+
 #include "Outils.h"
 #include "Heure.h"
 #include "config.h"
@@ -18,7 +21,8 @@
 
 
 int main(void) {
-
+	fstream fichier("LogMere.txt");
+	
 	// VT220 Si SSH
 	// XTERM par défaut
 	InitialiserApplication (XTERM);
@@ -95,6 +99,12 @@ int main(void) {
 		semctl(semId, NUM_SEM_PROF_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_AUTRE_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_GASTON_BERGER, SETVAL, 0);
+		unsigned short int val;
+		for (int i = 0; i < 5; i++)
+		{
+			semctl(semId, i, GETVAL, &val);
+			fichier << "Indice du semaphore " << i << " : " << val << std::endl;
+		}
 	
 	
 	 // ----- Creation des canaux

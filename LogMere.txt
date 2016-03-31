@@ -1,0 +1,5 @@
+Indice du semaphore 0 : 0
+Indice du semaphore 1 : 0
+Indice du semaphore 2 : 0
+Indice du semaphore 3 : 0
+Indice du semaphore 4 : 0

@@ -1,11 +1,15 @@
 Debut barriereSortie
 Debut moteur
 appel voiturier sortie
-appel voiturier sortie
 debut handlerSigChld
-pid fils mort : 12358
-Place libere : 512
+pid fils mort : 16106
+Place libere : 8
+Demande acces semaphore parking
+Acces obtenu du semaphore parking
+Liberation du semaphore parking
+Demande acces du semaphore requete
+Acces au semaphore requete
+Nombre de requetes : 0
+Fin sigChld
 Debut handlerSigUsr2
-Demande de mort de 12361
-Mort de 12361
 Fin de barriereSortie

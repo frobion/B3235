@@ -94,14 +94,17 @@ static void initVoiture(Voiture* voiture)
 static void handlerSigChld (int noSignal)
 {
   fichier << "debut handlerSigChld" << std::endl;
-  time_t tempsSortie = time(NULL);
+  time_t tempsSortie = (time(NULL)) % 10000;
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
+  numeroPlaceLibere = WEXITSTATUS(numeroPlaceLibere);
   listeVoiturierSortie.erase(pidFilsMort);
   fichier << "pid fils mort : " << pidFilsMort << std::endl << "Place libere : " << numeroPlaceLibere << std::endl;
   
   // Acces au semaphore de protection de parking
+  fichier << "Demande acces semaphore parking" << std::endl;
   while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
+  fichier << "Acces obtenu du semaphore parking" << std::endl;
   
   // Remise de la place dans l'etat sans voiture
   AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere].usager, parkingMPPtr->parking[numeroPlaceLibere].immatriculation, 
@@ -111,13 +114,16 @@ static void handlerSigChld (int noSignal)
   
   // Liberation du semaphore de protection de parking
   semop(semId, incrSemParking, 1);
+  fichier << "Liberation du semaphore parking" << std::endl;
   
   
   
   Requete requetesActuelles [NB_BARRIERES_ENTREE];
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
+  fichier << "Demande acces du semaphore requete" << std::endl;
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
+  fichier << "Acces au semaphore requete" << std::endl;
   
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
   fichier << "Nombre de requetes : " << nbRequetesActuelles << std::endl;

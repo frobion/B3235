@@ -13,6 +13,7 @@ EDLFLAGS = $(LIB)
 
 
 #Fichiers
+LOG=LogEntree.txt LogSimulation.txt LogBarriereSortie.txt LogMere.txt
 
 SRC =
 INT = Mere.h Simulation.h  BarriereSortie.h Entree.h #Mettre les .h ici
@@ -25,6 +26,8 @@ RM = @rm
 MESSAGE = "Compilation terminée"
 
 $(EXE): $(OBJ)
+	rm -vf $(LOG)
+	touch $(LOG)
 	$(LINK)  -o $(EXE) $^ $(EDLFLAGS) -ltp -lncurses -ltcl
 	$(ECHO) $(MESSAGE)
 
