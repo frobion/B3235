@@ -22,14 +22,6 @@ int main(void) {
 	// VT220 Si SSH
 	// XTERM par défaut
 	InitialiserApplication (XTERM);
-	
-	//~ // Blocage des signaux 
-	//~ sigset_t listeSignalBloque;
-    //~ sigemptyset(&listeSignalBloque);
-    //~ sigaddset(&listeSignalBloque, SIGUSR1);
-    //~ sigaddset(&listeSignalBloque, SIGUSR2);
-    //~ sigaddset(&listeSignalBloque, SIGCHLD);
-    //~ sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
 
 	//Liste des ID Processus
 	pid_t pidHeure;         //Heure
@@ -45,6 +37,14 @@ int main(void) {
 		TerminerApplication(false);
 		exit(0);
 	}
+	
+	// Blocage des signaux 
+	sigset_t listeSignalBloque;
+    sigemptyset(&listeSignalBloque);
+    sigaddset(&listeSignalBloque, SIGUSR1);
+    sigaddset(&listeSignalBloque, SIGUSR2);
+    sigaddset(&listeSignalBloque, SIGCHLD);
+    sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
 	
 
 	// ***** CREATION DES OBJETS PASSIFS  *****

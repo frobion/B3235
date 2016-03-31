@@ -1,4 +1,11 @@
 Debut barriereSortie
 Debut moteur
+appel voiturier sortie
+appel voiturier sortie
+debut handlerSigChld
+pid fils mort : 12358
+Place libere : 512
 Debut handlerSigUsr2
+Demande de mort de 12361
+Mort de 12361
 Fin de barriereSortie

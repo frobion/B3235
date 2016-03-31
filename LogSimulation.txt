@@ -1,4 +1,19 @@
 Init simulation
 Début commande
+Case 'S'
+Fin commande
+Début commande
+Case 'S'
+Fin commande
+Début commande
+Case 'S'
+Fin commande
+Début commande
+Case 'S'
+Fin commande
+Début commande
+Case 'P'
+Fin commande
+Début commande
 Case 'E'
 destruction

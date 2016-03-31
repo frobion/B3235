@@ -150,6 +150,13 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
     // -- Armement des signaux SIGUSR2 et SIGCHILD
     sigaction(SIGUSR2, &actionHandlerUSR2, NULL);
     sigaction(SIGCHLD, &actionHandlerCHLD, NULL);
+    
+    // Deblocage de SIGCHLD et SIGUSR2
+    sigset_t listeSignalDebloque;
+	sigemptyset(&listeSignalDebloque);
+	sigaddset(&listeSignalDebloque, SIGUSR2);
+	sigaddset(&listeSignalDebloque, SIGCHLD);
+	sigprocmask(SIG_UNBLOCK, &listeSignalDebloque, NULL);
 
 
 

@@ -228,6 +228,13 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   sigemptyset(&actionUSR2.sa_mask);
   actionUSR2.sa_flags = 0;
   sigaction (SIGUSR2, &actionUSR2, NULL);
+  
+  // Deblocage des signaux SIGUSR2 et SIGCHLD
+  sigset_t listeSignalDebloque;
+  sigemptyset(&listeSignalDebloque);
+  sigaddset(&listeSignalDebloque, SIGUSR2);
+  sigaddset(&listeSignalDebloque, SIGCHLD);
+  sigprocmask(SIG_UNBLOCK, &listeSignalDebloque, NULL);
 	
 
   fichier << "Debut moteur" << std::endl;
@@ -237,7 +244,11 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   for (;;)
   {
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
-	listeVoiturierSortie.insert(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
+	pid_t pid = SortirVoiture(numeroPlace);
+	if (pid != (pid_t) -1) // Sinon risque de fermeture de la session lors de la destruction de l'application
+	{
+	  listeVoiturierSortie.insert(pid);
+	}
 	fichier << "appel voiturier sortie" << std::endl;
   }
 }
