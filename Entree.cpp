@@ -13,10 +13,16 @@
 #include "Outils.h"
 #include "config.h"
 
-static ParkingMP shmParking;
-static RequeteMP shmRequete;
+static ParkingMP* ParkingMPPtr;
+static RequeteMP* RequeteMPPtr;
 
 static vector<pid_t> listeFils;
+
+static struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
+static struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
+static struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
+static struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
+static struct sembuf DECR_DANS_ENTREE [1];
 
 
 // ------ Handler SIGUSR2 --------
@@ -33,10 +39,15 @@ static void HandlerUSR2 ( int noSig )
 
   // Detachement de la memoire
 
-  shmdt(shmParking);
-  shmdt(shmRequete);
+  shmdt(ParkingMPPtr);
+  shmdt(RequeteMPPtr);
 
   exit(0);
+}
+
+static void HandlerCHLD(int noSig)
+{
+	
 }
 
 // TODO : HANDLER SIGCHLD
@@ -50,8 +61,10 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
 	 int numBarriere = typeEntree -1;
 	 
-	 const struct sembuf DECR_DANS_ENTREE = {{numBarriere, -1, 0}};
-	 
+	 DECR_DANS_ENTREE[1].sem_num = numBarriere;
+	 DECR_DANS_ENTREE[1].sem_op = -1;
+	 DECR_DANS_ENTREE[1].sem_flg = 0;
+	 	 
 	 for(unsigned int barriereEntree = 0; barriereEntree < NB_BARRIERES_ENTREE ; barriereEntree++)
 	 {
 		 if(barriereEntree != numBarriere) 
@@ -88,8 +101,8 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
     actionHandlerCHLD.sa_flags = 0;
 
     // -- Attachement des segments de memoires partagées --     
-	 ParkingMP* ParkingMPPtr =(ParkingMP*) shmat(shmIdParking, NULL, 0);
-	 RequeteMP* RequeteMPPtr =(RequeteMP*) shmat(shmIdRequete, NULL, 0);
+	 ParkingMPPtr =(ParkingMP*) shmat(shmIdParking, NULL, 0);
+	 RequeteMPPtr =(RequeteMP*) shmat(shmIdRequete, NULL, 0);
 
     // -- Armement des signaux SIGUSR2 et SIGCHILD
     sigaction(SIGUSR2, &actionHandlerUSR2, NULL);
@@ -105,13 +118,13 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         pid_t pidVoiturier;
         
         // On attend qu'une voiture arrive
-        while(read(canalEntree[numBarriere][0], &voitRecue , sizeof(Voiture) ) == -1 && errNo == EINTR ) ;
-		time_t heureArrivee = time();
-		voitRecue->dateArrive = heureArrivee;
+        while(read(canalEntree[numBarriere][0], &voitRecue , sizeof(Voiture) ) == -1 && errno == EINTR ) ;
+		time_t heureArrivee = time(NULL);
+		voitRecue.dateArrive = heureArrivee;
 		
 		// Quand une voiture arrive a une barriere
         // On dessine la voiture a la barriere
-        DessinerVoitureBarriere(typeEntree, voitRecue->usager);
+        DessinerVoitureBarriere(typeEntree, voitRecue.usager);
 
         
         // On recupere le semaphore de Requete
@@ -126,8 +139,8 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         }
         else
         {
-			RequeteMPPtr->requetes[numBarriere]->voiture = voitRecue;
-			RequeteMPPtr->requetes[numBarriere]->barriere = typeEntree;
+			RequeteMPPtr->requetes[numBarriere].voiture = voitRecue;
+			RequeteMPPtr->requetes[numBarriere].barriere = typeEntree;
 			while(semop(semId, DECR_DANS_ENTREE, 1) == -1 && errno == EINTR);
 			pidVoiturier = GarerVoiture(typeEntree);
 		}	

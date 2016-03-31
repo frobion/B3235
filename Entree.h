@@ -1,6 +1,8 @@
 #ifndef ENTREE_H
 #define ENTREE_H
 
+#include "Outils.h"
+
 void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEntree, int shmIdParking, int shmIdRequete, int semId);
 /* Procedure representant le fonctionnement de la tache GestionEntree
 contrat:
