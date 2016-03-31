@@ -1,0 +1,4 @@
+Debut barriereSortie
+Debut moteur
+Debut handlerSigUsr2
+Fin de barriereSortie
