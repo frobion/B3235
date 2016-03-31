@@ -36,7 +36,8 @@
 static int semId;
 static ParkingMP* parkingMPPtr;
 static RequeteMP* requeteMPPtr;
-static std::set<pid_t> listeVoiturierSortie; 
+static std::set<pid_t> listeVoiturierSortie;
+static int descLectureCanal;
 
 static struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
 static struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
@@ -88,7 +89,7 @@ static void initVoiture(Voiture* voiture)
 
 static void handlerSigChld (int noSignal)
 {
-  // TODO: time
+  time_t tempsSortie = time(NULL);
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
   listeVoiturierSortie.erase(pidFilsMort);
@@ -97,11 +98,15 @@ static void handlerSigChld (int noSignal)
   while(semop (semId, DECR_DANS_PARKING, 1) == -1 && errno == EINTR);
   
   // Remise de la place dans l'etat sans voiture
+  AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere].usager, parkingMPPtr->parking[numeroPlaceLibere].immatriculation, 
+      parkingMPPtr->parking[numeroPlaceLibere].dateArrive, tempsSortie);
   initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere]));
   Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
-  semop(semId, INCR_DANS_PARKING, 1); 
+  semop(semId, INCR_DANS_PARKING, 1);
+  
+  
   
   Requete requetesActuelles [NB_BARRIERES_ENTREE];
   int nbRequetesActuelles;
@@ -154,12 +159,18 @@ static void handlerSigChld (int noSignal)
 
 static void handlerSigUsr2 (int noSignal)
 {
+  close(descLectureCanal);
+  
+  shmdt(parkingMPPtr);
+  shmdt(requeteMPPtr);
+  
   std::set<pid_t>::iterator it;
   for (it = listeVoiturierSortie.begin(); it != listeVoiturierSortie.end(); it++)
   {
 	kill(*it, SIGUSR2);
 	while(waitpid(*it, NULL, 0) == -1 && errno == EINTR);
   }
+  
   exit(0);
 }
 
@@ -176,7 +187,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
     close(canauxBarriereEntree[i][1]);
   }
   close(canalBarriereSortie[1]);
-  int descLectureCanal = canalBarriereSortie[0];
+  descLectureCanal = canalBarriereSortie[0];
   
   // Attachement de la memoire partagee
   parkingMPPtr = (ParkingMP*) shmat(shmParkingId, NULL, 0);
@@ -208,9 +219,4 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
 	listeVoiturierSortie.insert(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
   }
-	
-  // DESTRUCTION
-  // Detachement de la MP
-  shmdt(parkingMPPtr);
-  shmdt(requeteMPPtr);
 }
