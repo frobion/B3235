@@ -9,7 +9,7 @@
 
 #include "Outils.h"
 
-static shmP shmDescripteur;
+//static shmP shmDescripteur;
 //static shmP shmRequete;
 //static shmP shmCompteur;
 
@@ -30,7 +30,7 @@ static void HandlerUSR2 ( int noSig )
 
   // Detachement de la memoire
 
-  shmdt(shmDescripteur.shm);
+  //shmdt(shmDescripteur.shm);
   //shmdt(shmRequete.shm);
   //shmdt(shmCompteur.shm);
 

@@ -1,17 +1,17 @@
 /*************************************************************************
-                           Simulation.h  -  description
+                           BarriereSortie.h  -  description
                              -------------------
-    début                : Lundi 14 mars 2016
+    début                : Mercredi 23 mars 2016
     copyright            : (C) 2016 par Francois Robion
     e-mail               : francois.robion@insa-lyon.fr
 *************************************************************************/
 
-//---------- Interface du module <Simulation> (fichier Simulation.h) -----
-#if ! defined SIMULATION_H
-#define SIMULATION_H
+//---------- Interface du module <BarriereSortie> (fichier BarriereSortie.h)
+#if ! defined BARRIERE_SORTIE_H
+#define BARRIERE_SORTIE_H
 
 //------------------------------------------------------------------------
-// Rôle du module <Simulation>
+// Rôle du module <BarriereSortie>
 //------------------------------------------------------------------------
 
 ////////////////////////////////////////////////////////////////// INCLUDE
@@ -23,8 +23,6 @@
 
 /////////////////////////////////////////////////////////////////// PUBLIC
 //---------------------------------------------------- Fonctions publiques
-void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[]);
-void Commande(char code, unsigned int valeur);
+void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[]);
 
-
-#endif // SIMULATION_H
+#endif // BARRIERE_SORTIE_H

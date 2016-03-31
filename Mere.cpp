@@ -14,7 +14,7 @@
 
 #include "Simulation.h"
 #include "Entree.h"
-#include "ShmP.h"
+
 
 int main(void) {
 
@@ -35,19 +35,19 @@ int main(void) {
 	//Memoire partagee Creation
 
 		// -------- Descripteur
-		shmP shmDescripteur;
+		//shmP shmDescripteur;
 
 					// Création du segment de mémoire
 						// Genere cle en fct du chemin vers le fichier
 						// Le 2nd param : caractere pour differencier les differentes cles
 		key_t cle2 = ftok(pathname, 'P');
-		shmDescripteur.idShm = shmget(cle2, sizeof(int) * 2 + sizeof(TypeUsager) + sizeof(time_t), IPC_CREAT | 0660);
+		//shmDescripteur.idShm = shmget(cle2, sizeof(int) * 2 + sizeof(TypeUsager) + sizeof(time_t), IPC_CREAT | 0660);
 
 					// Création du semaphore
 		cle2 = ftok(pathname, 'Q');
-		shmDescripteur.idMutex = semget(cle2, 1,IPC_CREAT | 0660);
+		//shmDescripteur.idMutex = semget(cle2, 1,IPC_CREAT | 0660);
 					// Initialisation du sémaphore
-		semctl(shmDescripteur.idMutex, 0, SETVAL, 1);
+		//semctl(shmDescripteur.idMutex, 0, SETVAL, 1);
 
 /*
 		// -------- Requete
@@ -146,10 +146,10 @@ int main(void) {
 
 				// ----- Descripteur
 	Afficher(MESSAGE,"Suppression memoire descripteur");
-	shmctl(shmDescripteur.idShm, IPC_RMID, 0);
+	//shmctl(shmDescripteur.idShm, IPC_RMID, 0);
 
 	Afficher(MESSAGE,"Suppression semaphore descripteur");
-	semctl(shmDescripteur.idMutex, 0, IPC_RMID, 0);
+	//semctl(shmDescripteur.idMutex, 0, IPC_RMID, 0);
 
 	/*
 				// ----- Requete

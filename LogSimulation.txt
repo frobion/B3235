@@ -1,0 +1,9 @@
+Init simulation
+Début commande
+Case 'E'
+Début commande
+Case 'S'
+Début commande
+Case 'P'
+Début commande
+Case 'E'
