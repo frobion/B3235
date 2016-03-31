@@ -10,6 +10,12 @@ struct Voiture
   unsigned int dateArrive;
 };
 
+struct Requete
+{
+  Voiture voiture;
+  TypeBarriere barriere;
+};
+
 struct ParkingMP
 {
   Voiture parking [8]; 
@@ -17,7 +23,7 @@ struct ParkingMP
 
 struct RequetesMP
 {
-	Voiture requetes [3];
+	Requete requetes [3];
 	int nbPlacesOccupees;
 };
 

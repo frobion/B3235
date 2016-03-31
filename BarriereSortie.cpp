@@ -57,24 +57,26 @@ static int chercheRequetesActuelles(Voiture* requetesActuelles)
   return nbRequetesActuelles;
 }
 
-// Renvoie 1 
-static int comparePrioriteRequetes(Voiture* r1, Voiture* r2)
+// Renvoie true si r1 autant ou plus prioritaire que r2, false sinon
+static bool comparePrioriteRequetes(Voiture* r1, indiceR1, Voiture* r2, indiceR2)
 {
   if (r1->usager == TypeUsager::PROF && r2->usager == TypeUsager::AUTRE)
   {
-	return 1;
+	return true;
   }
   else if (r1->usager == TypeUsager::AUTRE && r2->usager == TypeUsager::PROF)
   {
-	return -1;
+	return false;
   }
   else
   {
-	return (r1->dateArrive > r2->dateArrive) ? -1 : 1;
+	return (r1->dateArrive <= r2->dateArrive);
+  }
 }
 
 static void handlerSigChld (int noSignal)
 {
+  // TODO: time
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, numeroPlaceLibere, 0); // Destruction du fils mort
   
@@ -89,7 +91,7 @@ static void handlerSigChld (int noSignal)
   // Liberation du semaphore de protection de parking
   semop(semId, INCR_DANS_PARKING, 1); 
   
-  Voiture requetesActuelles [3];
+  Voiture requetesActuelles [NB_BARRIERES_ENTREE];
   // Acces au semaphore de protection des requetes
   semop(semId, DECR_DANS_REQUETE, 1);
   
