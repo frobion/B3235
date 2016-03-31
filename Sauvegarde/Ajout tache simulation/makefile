@@ -5,7 +5,7 @@ COMP = g++
 LINK = g++
 
 # Options de compilation et editions de liens
-CHEMIN = /share/public/tp/tp-multitache
+CHEMIN = /shares/public/tp/tp-multitache
 INC = -I$(CHEMIN)
 LIB = -L$(CHEMIN)
 CPPFLAGS = -Wall -ansi -ggdb -std=c++11 -g $(INC)
@@ -30,8 +30,11 @@ $(EXE): $(OBJ)
 
 #Mettre les dependances particulieres ici
 
-src/%.o:%.cpp
+%.o:%.cpp
 	$(COMP) -c $(CPPFLAGS) $<
+
+Mere.cpp:Mere.h Simulation.h
+Simulation.cpp:Simulation.h
 
 clean:
 	$(RM) -fv *.o $(EXE)

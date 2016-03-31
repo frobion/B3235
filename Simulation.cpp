@@ -1,5 +1,6 @@
 #include "Outils.h"
 #include "Menu.h"
+#include "config.h"
 
 
 #include <unistd.h>
@@ -9,6 +10,7 @@
 
 static int descEcritureCanauxBarriereEntree [NB_BARRIERES_ENTREE];
 static int descEcritureCanalBarriereSortie;
+static int compteurImmatriculation;
 
 static fstream fichier("test.txt");
 
@@ -16,8 +18,9 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
 {
   // TODO INIT
   
+  compteurImmatriculation = 0;
   // Ouverture fichier (log)
-  // fstream fichier("test.txt");
+  fstream fichier("test.txt");
   fichier << "Inir simulation" << std::endl;
   
   // Blocage SIGUSR1, SIGUSR2, SIGCHLD
@@ -70,31 +73,30 @@ void Commande (char code, unsigned int valeur)
       fichier << "Case 'E'" << std::endl;
       destruction();
       break;
-    //~ case 'A':
-      //~ if (valeur == 1)
-      //~ {
-        //~ 
-      //~ } else if (valeur == 2)
-      //~ {
-        //~ 
-      //~ }
-      //~ else
-      //~ {
-        //~ 
-      //~ }
-      //~ break;
-    //~ case 'P':
-            //~ if (valeur == 1)
-      //~ {
-        //~ 
-      //~ } else if (valeur == 2)
-      //~ {
-        //~ 
-      //~ }
-      //~ else
-      //~ {
-        //~ 
-      //~ }
+    case 'A':
+      if (valeur == 1)
+      {
+		Voiture voiture = {TypeUsager::AUTRE, compteurImmatriculation++, 0};
+        write(desEcritureCanalBarriereEntree[AUTRE_BLAISE_PASCAL - 1], &voiture, sizeof(Voiture));
+      }
+      else
+      {
+		  
+	  }
+      break;
+    case 'P':
+      if (valeur == 1)
+      {
+        
+      } 
+      else
+      {
+        
+      }
+      break;
+    case 'S':
+	  
+	  break;
     default:
       fichier << "default" << std::endl;
       Afficher(MESSAGE, "Commande: code inconnue");
