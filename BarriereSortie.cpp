@@ -21,6 +21,8 @@
 #include <limits.h>
 #include <errno.h>
 
+#include <iostream>
+#include <fstream>
 
 //------------------------------------------------------ Include personnel
 #include "BarriereSortie.h"
@@ -47,6 +49,8 @@ static struct sembuf decrSemRequete [1] = {{NUM_SEM_REQUETE, -1, 0}};
 static struct sembuf incrSemProfBlaisePascal [1] = {{NUM_SEM_PROF_BLAISE_PASCAL, 1, 0}};
 static struct sembuf incrSemAutreBlaisePascal [1] = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
 static struct sembuf incrSemGastonBerger [1] = {{NUM_SEM_GASTON_BERGER, 1, 0}};
+
+static fstream fichier ("LogBarriereSortie.txt");
 
 
 //------------------------------------------------------ Fonctions privées
@@ -89,10 +93,12 @@ static void initVoiture(Voiture* voiture)
 
 static void handlerSigChld (int noSignal)
 {
+  fichier << "debut handlerSigChld" << std::endl;
   time_t tempsSortie = time(NULL);
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
   listeVoiturierSortie.erase(pidFilsMort);
+  fichier << "pid fils mort : " << pidFilsMort << std::endl << "Place libere : " << numeroPlaceLibere << std::endl;
   
   // Acces au semaphore de protection de parking
   while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
@@ -114,6 +120,7 @@ static void handlerSigChld (int noSignal)
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
   
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
+  fichier << "Nombre de requetes : " << nbRequetesActuelles << std::endl;
   
   if (nbRequetesActuelles == 0)
   {
@@ -126,9 +133,11 @@ static void handlerSigChld (int noSignal)
 	{
 	  meilleurRequete = *comparePrioriteRequetes(&meilleurRequete, &requetesActuelles[i]);
 	}
+	fichier << "Barriere de la meilleur requete : " << meilleurRequete.barriere << std::endl;
 	switch(meilleurRequete.barriere)
 	{
 	  case PROF_BLAISE_PASCAL:
+	    fichier << "Reveil PROF_BLAISE_PASCAL" << std::endl;
 	    // Reveil de la tache entree correspondante
 	    semop (semId, incrSemProfBlaisePascal, 1);
 	    // Reinitilisation de la MP pour la requete correspondante
@@ -138,12 +147,14 @@ static void handlerSigChld (int noSignal)
 	    Effacer(TypeZone::REQUETE_R1);
 	    break;
 	  case AUTRE_BLAISE_PASCAL:
+	    fichier << "Reveil AUTRE_BLAISE_PASCAL" << std::endl;
 	    semop(semId, incrSemAutreBlaisePascal, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
 	    Effacer(TypeZone::REQUETE_R2);
 	    break;
 	  case ENTREE_GASTON_BERGER:
+	    fichier << "Reveil ENTREE_GASTON_BERGER" << std::endl;
 	    semop(semId, incrSemGastonBerger, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].barriere	 = TypeBarriere::AUCUNE;
@@ -151,14 +162,17 @@ static void handlerSigChld (int noSignal)
 	    break;
 	  default:
 	    Afficher(TypeZone::MESSAGE, "Mauvaise barriere, handler SIGCHLD, barriereSortie");
+	    fichier << "default" << std::endl;
 	    break;
 	}
   }
   semop(semId, incrSemRequete, 1); // Liberation du semaphore de protection des requetes
+  fichier << "Fin sigChld" << std::endl;
 }
 
 static void handlerSigUsr2 (int noSignal)
 {
+  fichier << "Debut handlerSigUsr2" << std::endl;
   Afficher(TypeZone::MESSAGE, "SIGUSR2 recu par sortie");
   close(descLectureCanal);
   
@@ -169,9 +183,13 @@ static void handlerSigUsr2 (int noSignal)
   for (it = listeVoiturierSortie.begin(); it != listeVoiturierSortie.end(); it++)
   {
 	kill(*it, SIGUSR2);
+	fichier << "Demande de mort de " << *it << std::endl;
 	while(waitpid(*it, NULL, 0) == -1 && errno == EINTR);
+	fichier << "Mort de " << *it << std::endl;
   }
   
+  fichier << "Fin de barriereSortie" << std::endl;
+  fichier.close();
   exit(0);
 }
 
@@ -180,7 +198,7 @@ static void handlerSigUsr2 (int noSignal)
 void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmParkingId, int shmRequeteId, int semIdParam)
 {
   // INIT
-  
+  fichier << "Debut barriereSortie" << std::endl;
   // Fermeture canaux inutilise
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
@@ -211,7 +229,8 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   actionUSR2.sa_flags = 0;
   sigaction (SIGUSR2, &actionUSR2, NULL);
 	
-  
+
+  fichier << "Debut moteur" << std::endl;
   // MOTEUR
   unsigned int numeroPlace;
   
@@ -219,5 +238,6 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   {
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
 	listeVoiturierSortie.insert(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
+	fichier << "appel voiturier sortie" << std::endl;
   }
 }
