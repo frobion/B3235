@@ -94,10 +94,11 @@ static void handlerSigChld (int noSignal)
   listeVoiturierSortie.erase(pidFilsMort);
   
   // Acces au semaphore de protection de parking
-  semop (semId, DECR_DANS_PARKING, 1);
+  while(semop (semId, DECR_DANS_PARKING, 1) == -1 && errno == EINTR);
   
   // Remise de la place dans l'etat sans voiture
   initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere]));
+  Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
   semop(semId, INCR_DANS_PARKING, 1); 
@@ -105,7 +106,7 @@ static void handlerSigChld (int noSignal)
   Requete requetesActuelles [NB_BARRIERES_ENTREE];
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
-  semop(semId, DECR_DANS_REQUETE, 1);
+  while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
   
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
   
@@ -123,16 +124,25 @@ static void handlerSigChld (int noSignal)
 	switch(meilleurRequete.barriere)
 	{
 	  case PROF_BLAISE_PASCAL:
+	    // Reveil de la tache entree correspondante
 	    semop (semId, INCR_DANS_PROF_BLAISE_PASCAL, 1);
+	    // Reinitilisation de la MP pour la requete correspondante
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::PROF_BLAISE_PASCAL - 1].voiture));
+	    requeteMPPtr->requetes[TypeBarriere::PROF_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
+	    // Gestion de l'affichage
+	    Effacer(TypeZone::REQUETE_R1);
 	    break;
 	  case AUTRE_BLAISE_PASCAL:
 	    semop(semId, INCR_DANS_AUTRE_BLAISE_PASCAL, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].voiture));
+	    requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
+	    Effacer(TypeZone::REQUETE_R2);
 	    break;
 	  case ENTREE_GASTON_BERGER:
 	    semop(semId, INCR_DANS_GASTON_BERGER, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].voiture));
+	    requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].barriere	 = TypeBarriere::AUCUNE;
+	    Effacer(TypeZone::REQUETE_R3);
 	    break;
 	  default:
 	    Afficher(TypeZone::MESSAGE, "Mauvaise barriere, handler SIGCHLD, barriereSortie");
@@ -144,7 +154,13 @@ static void handlerSigChld (int noSignal)
 
 static void handlerSigUsr2 (int noSignal)
 {
-  
+  std::set<pid_t>::iterator it;
+  for (it = listeVoiturierSortie.begin(); it != listeVoiturierSortie.end(); it++)
+  {
+	kill(*it, SIGUSR2);
+	while(waitpid(*it, NULL, 0) == -1 && errno == EINTR);
+  }
+  exit(0);
 }
 
 //////////////////////////////////////////////////////////////////  PUBLIC
