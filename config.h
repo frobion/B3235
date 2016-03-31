@@ -25,7 +25,7 @@ struct ParkingMP
 struct RequeteMP
 {
 	Requete requetes [3];
-	int nbPlacesOccupees;
+	unsigned int nbPlacesOccupees;
 };
 
 const int NUM_SEM_PROF_BLAISE_PASCAL = 0;

@@ -18,8 +18,6 @@ static RequeteMP* RequeteMPPtr;
 
 static vector<pid_t> listeFils;
 
-static struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
-static struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
 static struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
 static struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
 static struct sembuf DECR_DANS_ENTREE [1];
@@ -59,7 +57,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 	
 	
 	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
-	 int numBarriere = typeEntree -1;
+	 unsigned int numBarriere = typeEntree -1;
 	 
 	 DECR_DANS_ENTREE[1].sem_num = numBarriere;
 	 DECR_DANS_ENTREE[1].sem_op = -1;
