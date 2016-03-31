@@ -13,16 +13,28 @@
 #include "Outils.h"
 #include "config.h"
 
+
+struct pidVoiture 
+{ 
+	pid_t pid;
+	Voiture voiture;
+};
+
+
 static ParkingMP* ParkingMPPtr;
 static RequeteMP* RequeteMPPtr;
 
-static vector<pid_t> listeFils;
+static vector<pidVoiture> listeFils;
 
-const struct sembuf INCR_DANS_PARKING [1] = {{NUM_SEM_PARKING, 1, 0}};
-const struct sembuf DECR_DANS_PARKING [1] = {{NUM_SEM_PARKING, -1, 0}};
-static struct sembuf INCR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, 1, 0}};
-static struct sembuf DECR_DANS_REQUETE [1] = {{NUM_SEM_REQUETE, -1, 0}};
-static struct sembuf DECR_DANS_ENTREE [1];
+static int semId;
+
+static struct sembuf incrSemParking [1] = {{NUM_SEM_PARKING, 1, 0}};
+static struct sembuf decrSemParking [1] = {{NUM_SEM_PARKING, -1, 0}};
+static struct sembuf incrSemRequete [1] = {{NUM_SEM_REQUETE, 1, 0}};
+static struct sembuf decrSemRequete [1] = {{NUM_SEM_REQUETE, -1, 0}};
+static struct sembuf decrSemEntree [1];
+
+
 
 
 // ------ Handler SIGUSR2 --------
@@ -33,8 +45,8 @@ static void HandlerUSR2 ( int noSig )
   // Destruction de tous les deplacements
   for(unsigned int i = 0; i < listeFils.size(); i++)
   {
-  	kill(listeFils[i],SIGUSR2);
-  	waitpid(listeFils[i],0,0);
+  	kill(listeFils[i].pid,SIGUSR2);
+  	waitpid(listeFils[i].pid,0,0);
   }
 
   // Detachement de la memoire
@@ -48,28 +60,41 @@ static void HandlerUSR2 ( int noSig )
 static void HandlerCHLD(int noSig)
 {
 	int numPlace;
-	waitpid(-1 ,&numPlace,0);
-	while(semop(semId, DECR_DANS_PARKING, 1) == -1 && errno == EINTR);
-	ParkingMPPtdr->parking[numPlace] = voitRecue;
-	AfficherPlace(numPlace, voitRecue.usager, voitRecue.immatriculation, voitRecue.dateArrive);
-	while(semop(semId, INCR_DANS_PARKING, 1) == -1 && errno == EINTR);	
+	pid_t pidDestruct = waitpid(-1 ,&numPlace,0);
+	
+	Voiture voitureGarer;
+	std::vector<pidVoiture>::iterator ite;	
+	for(ite = listeFils.begin(); ite != listeFils.end(); ite++)
+	{
+		if((*ite).pid == pidDestruct) 
+		{
+			voitureGarer = (*ite).voiture;
+			listeFils.erase(ite);
+			break;
+		}
+	}
+	
+	while(semop(semId, decrSemParking, 1) == -1 && errno == EINTR);
+	ParkingMPPtr->parking[numPlace] = voitureGarer;
+	AfficherPlace(numPlace, voitureGarer.usager, voitureGarer.immatriculation, voitureGarer.dateArrive);
+	while(semop(semId, incrSemParking, 1) == -1 && errno == EINTR);	
 	
 }
 
 // TODO : HANDLER SIGCHLD
 // Mise a jour de memoire partagee parking quand voiturier meurt
 
-void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEntree, int shmIdParking, int shmIdRequete, int semId)
+void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEntree, int shmIdParking, int shmIdRequete, int semIdParam)
 {
     // --  INITIALISATION  --
 	
-	
+	semId = semIdParam;
 	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
 	 unsigned int numBarriere = typeEntree -1;
 	 
-	 DECR_DANS_ENTREE[1].sem_num = numBarriere;
-	 DECR_DANS_ENTREE[1].sem_op = -1;
-	 DECR_DANS_ENTREE[1].sem_flg = 0;
+	 decrSemEntree[1].sem_num = numBarriere;
+	 decrSemEntree[1].sem_op = -1;
+	 decrSemEntree[1].sem_flg = 0;
 	 	 
 	 for(unsigned int barriereEntree = 0; barriereEntree < NB_BARRIERES_ENTREE ; barriereEntree++)
 	 {
@@ -134,13 +159,13 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 
         
         // On recupere le semaphore de Requete
-        while(semop(semId, DECR_DANS_REQUETE, 1) == -1 && errno == EINTR);
+        while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
         
         // Si y a de une place de libre on gare la voiture, sinon on emet une requete et on attend qu'une place ce libere
         if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
 			RequeteMPPtr->nbPlacesOccupees++;
-			while(semop(semId, INCR_DANS_REQUETE, 1) == -1 && errno == EINTR);
+			while(semop(semId, incrSemRequete, 1) == -1 && errno == EINTR);
 			pidVoiturier = GarerVoiture(typeEntree);
         }
         else
@@ -148,13 +173,14 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 			RequeteMPPtr->requetes[numBarriere].voiture = voitRecue;
 			RequeteMPPtr->requetes[numBarriere].barriere = typeEntree;
 			AfficherRequete(typeEntree, voitRecue.usager, heureArrivee);
-			while(semop(semId, DECR_DANS_ENTREE, 1) == -1 && errno == EINTR);
+			while(semop(semId, decrSemEntree, 1) == -1 && errno == EINTR);
 			pidVoiturier = GarerVoiture(typeEntree);
 		}	
         
 
         // on garde le pid du Voiturier
-		listeFils.push_back(pidVoiturier);
+        struct pidVoiture mapPidVoiture = {pidVoiturier, voitRecue};
+		listeFils.push_back(mapPidVoiture);
 
 
     }
