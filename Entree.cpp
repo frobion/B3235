@@ -7,6 +7,7 @@
 #include <sys/shm.h>
 #include <vector>
 #include <errno.h>
+#include <time.h>
 
 #include "Outils.h"
 #include "config.h"
@@ -38,13 +39,11 @@ static void HandlerUSR2 ( int noSig )
 }
 
 // TODO : HANDLER SIGCHLD
-
+// Mise a jour de memoire partagee parking quand voiturier meurt
 
 void GestionEntree(canalEntree[3][2],canalSortie[2], TypeBarriere typeEntree, shmIdParking, shmIdRequete, semId)
 {
     // --  INITIALISATION  --
-	
-	// Bien regarder par le nbPlaceOccupees
 	
 	
 	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
@@ -106,6 +105,8 @@ void GestionEntree(canalEntree[3][2],canalSortie[2], TypeBarriere typeEntree, sh
         
         // On attend qu'une voiture arrive
         while(read(canalEntree[numBarriere][0], &voitRecue , sizeof(Voiture) ) == -1 && errNo == EINTR ) ;
+		time_t heureArrivee = time();
+		voitRecue->dateArrive = heureArrivee;
 		
 		// Quand une voiture arrive a une barriere
         // On dessine la voiture a la barriere
@@ -124,13 +125,12 @@ void GestionEntree(canalEntree[3][2],canalSortie[2], TypeBarriere typeEntree, sh
         }
         else
         {
+			RequeteMPPtr->requetes[numBarriere]->voiture = voitRecue;
+			RequeteMPPtr->requetes[numBarriere]->barriere = typeEntree;
 			while(semop(semId, DECR_DANS_ENTREE, 1) == -1 && errno == EINTR);
 			pidVoiturier = GarerVoiture(typeEntree);
 		}	
         
-
-
-
 
         // on garde le pid du Voiturier
 		listeFils.push_back(pidVoiturier);
