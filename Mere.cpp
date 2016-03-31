@@ -11,6 +11,7 @@
 
 #include "Outils.h"
 #include "Heure.h"
+#include "config.h"
 
 #include "Simulation.h"
 #include "Entree.h"
@@ -55,21 +56,21 @@ int main(void) {
 		// ------- Parking
 		// segment de mémoire
 		key_t cle2 = ftok(pathname, 'P');
-		shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
+		int shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
 
 		// -------- Requete + Compteur
 		// Segment de memoire
 		key_t cle3 = ftok(pathname, 'R');
-		shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
+		int shmIdRequete = shmget(cle3, sizeof(RequetesMP), IPC_CREAT | 0660);
 		
 		// Semaphore
 		cle2 = ftok(pathname, 'Q');
-		semId = semget(cle2, 1,IPC_CREAT | 0660);
+		int semId = semget(cle2, 1,IPC_CREAT | 0660);
 		semctl(semId, 0, SETVAL, 1);
 	
 	// Creation des canaux
 	int canalEntree[3][2];
-	int canalSortie[2]
+	int canalSortie[2];
 	
 	pipe(canalEntree[0]);
 	pipe(canalEntree[1]);
