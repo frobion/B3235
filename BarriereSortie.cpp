@@ -17,6 +17,8 @@
 #include <sys/shm.h>
 #include <unistd.h>
 #include <vector>
+#include <limits.h>
+#include <errno.h>
 
 //------------------------------------------------------ Include personnel
 #include "BarriereSortie.h"
@@ -40,7 +42,7 @@ static std::vector<pid_t> listeVoiturierSortie;
 // Acces au semaphore deja effectue avant l'appel de cette methode
 static int chercheRequetesActuelles(Voiture* requetesActuelles)
 {
-  if (requetesMPPtr->nbPlacesOccupees != 8)
+  if (requetesMPPtr->nbPlacesOccupees != NB_PLACES)
   {
     return 0;
   }
@@ -53,6 +55,22 @@ static int chercheRequetesActuelles(Voiture* requetesActuelles)
     }
   }
   return nbRequetesActuelles;
+}
+
+// Renvoie 1 
+static int comparePrioriteRequetes(Voiture* r1, Voiture* r2)
+{
+  if (r1->usager == TypeUsager::PROF && r2->usager == TypeUsager::AUTRE)
+  {
+	return 1;
+  }
+  else if (r1->usager == TypeUsager::AUTRE && r2->usager == TypeUsager::PROF)
+  {
+	return -1;
+  }
+  else
+  {
+	return (r1->dateArrive > r2->dateArrive) ? -1 : 1;
 }
 
 static void handlerSigChld (int noSignal)
@@ -76,17 +94,39 @@ static void handlerSigChld (int noSignal)
   semop(semId, DECR_DANS_REQUETE, 1);
   
   int nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
+  
   if (nbRequetesActuelles == 0)
   {
     requetesMPPtr->nbPlacesOccupees--;
+    semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
   }
   else // Analyse des requetes, pour savoir qui doit rentrer
   {
+	semop(semId, INCR_DANS_REQUETE, 1); // Liberation du semaphore de protection des requetes
+	
+	Voiture meilleurRequetes;
     bool auMoinsUneRequetesProf = false;
+    unsigned int tempsArriveMin = UINT_MAX;
+    unsigned int tempsArriveMinProf = UINT_MAX;
     for (int i = 0; i < nbRequetesActuelles; i++)
     {
-	  if (
+	  if (requetesActuelles[i]->usager == TypeUsager::PROF)
+	  {
+        auMoinsUneRequetesProf = true;
+        if (requetesActuelles[i]->dateArrive < tempsArriveMinProf)
+        {
+		  tempsArriveMinProf = requetesActuelles[i]->dateArrive;
+		  meilleurRequetes = requetesActuelles[i];
+	    }
+	  }
+	  // Si un prof est la, la meilleur requetes a forcement ete mise a jour dans la partie prof
+	  if (!auMoinsUneRequetesProf && requetesActuelles[i]->dateArrive < tempsArriveMin)
+	  {
+		tempsArriveMin = requetesActuelles[i]->dateArrive;
+		meilleurRequetes = requetesActuelles[i];
+      }
 	}
+	
   }
 }
 
@@ -137,7 +177,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   
   for (;;)
   {
-	read (descLectureCanal, &numeroPlace, sizeof(unsigned int));
+	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
 	listeVoiturierSortie.push_back(SortirVoiture(numeroPlace)); // Erreur (retour == -1) non gere	
   }
 	
