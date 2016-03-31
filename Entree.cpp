@@ -49,8 +49,11 @@ static void HandlerUSR2 ( int noSig )
   // Destruction de tous les deplacements
   for(unsigned int i = 0; i < listeFils.size(); i++)
   {
-  	kill(listeFils[i].pid,SIGUSR2);
-  	waitpid(listeFils[i].pid,0,0);
+	if(listeFils[i] != -1) // Sinon envoie de SIGUSR2 a tous les process
+	{
+		kill(listeFils[i].pid,SIGUSR2);
+		waitpid(listeFils[i].pid,0,0);
+	}
   }
 
   // Detachement de la memoire
