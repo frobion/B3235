@@ -100,10 +100,11 @@ int main(void) {
 		semctl(semId, NUM_SEM_AUTRE_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_GASTON_BERGER, SETVAL, 0);
 		unsigned short int val;
+		int val2;
 		for (int i = 0; i < 5; i++)
 		{
-			semctl(semId, i, GETVAL, &val);
-			fichier << time(NULL)%10000 << "  " << "Indice du semaphore " << i << " : " << val << std::endl;
+			val2 = semctl(semId, i, GETVAL, &val);
+			fichier << time(NULL)%10000 << "  " << "Indice du semaphore " << i << " : " << val << " " << val2 << std::endl;
 		}
 	
 	

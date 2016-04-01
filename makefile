@@ -27,7 +27,7 @@ MESSAGE = "Compilation terminée"
 
 $(EXE): $(OBJ)
 	rm -vf $(LOG)
-	touch $(LOG)
+	touch $(LOG) #Permet de réinitialiser les fichiers de logs entre chaque compilation
 	$(LINK)  -o $(EXE) $^ $(EDLFLAGS) -ltp -lncurses -ltcl
 	$(ECHO) $(MESSAGE)
 

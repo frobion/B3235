@@ -1,10 +1,32 @@
-Init simulation
-Début commande
-Case 'P'
-Fin commande
-Début commande
-Case 'S'
-Fin commande
-Début commande
-Case 'E'
-destruction
+913  Init simulation
+939  Début commande
+939  Case 'A'
+939  Fin commande
+940  Début commande
+940  Case 'A'
+940  Fin commande
+941  Début commande
+941  Case 'P'
+941  Fin commande
+942  Début commande
+942  Case 'P'
+942  Fin commande
+947  Début commande
+947  Case 'E'
+947  destruction
+
+722  Début commande
+722  Case 'A'
+722  Fin commande
+723  Début commande
+723  Case 'P'
+723  Fin commande
+723  Début commande
+723  Case 'P'
+723  Fin commande
+740  Début commande
+740  Case 'A'
+740  Fin commande
+743  Début commande
+743  Case 'E'
+743  destruction

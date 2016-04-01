@@ -109,9 +109,9 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 	semId = semIdParam;
 	// Canaux : On ferme tout sauf en lecture sur la barriere concernee
 	 numBarriere = typeEntree -1;
+	 fichier << time(NULL)%10000 << "  " << numBarriere << " : Init Entree" << std::endl;
 	 
 	 decrSemEntree[1].sem_num = numBarriere;
-	 fichier << time(NULL)%10000 << "  " << numBarriere << " : Init Entree" << std::endl;
 	 decrSemEntree[1].sem_op = -1;
 	 decrSemEntree[1].sem_flg = 0;
 	 	 
@@ -119,26 +119,23 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 	 {
 		 if(barriereEntree != numBarriere) 
 		 {
-			 //fichier << "entree canal mauvais" << std::endl;
 			close(canalEntree[barriereEntree][0]);
 			close(canalEntree[barriereEntree][1]);
-			//fichier << numBarriere << " : sortie canal mauvais" << std::endl;
 	     }
 	     else
 	     { 
-			 //fichier << "entree canal bon " << std::endl;
 			 close(canalEntree[barriereEntree][1]);
-			 //fichier << numBarriere << " : sortie canal bon" << std::endl;
 		 }
      }
      
-     
-     for(unsigned int barriereSortie = 0; barriereSortie < NB_BARRIERES_SORTIE ; barriereSortie++)
-	 {
-		close(canalEntree[barriereSortie][0]);
-		close(canalEntree[barriereSortie][1]);
-		//fichier << numBarriere << " : Fermeture canal comm sortie" << std::endl;
-     }
+     //~ 
+     //~ for(unsigned int barriereSortie = 0; barriereSortie < NB_BARRIERES_SORTIE ; barriereSortie++)
+	 //~ {
+		//~ close(canalEntree[barriereSortie][0]);
+		//~ close(canalEntree[barriereSortie][1]);
+     //~ }
+     close(canalSortie[0]);
+     close(canalSortie[1]);
 
      
     // Creation des handlers de SIGUSR2
@@ -201,9 +198,10 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
 			RequeteMPPtr->nbPlacesOccupees++;
-			while(semop(semId, incrSemRequete, 1) == -1 && errno == EINTR);
+			semop(semId, incrSemRequete, 1);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : Liberation semaphore requete" << std::endl;
 			pidVoiturier = GarerVoiture(typeEntree);
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : pidVoiturier (then) " << pidVoiturier << std::endl;
         }
         else
         {		
@@ -212,14 +210,17 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 			AfficherRequete(typeEntree, voitRecue.usager, heureArrivee);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : Requete barriere " << RequeteMPPtr->requetes[numBarriere].barriere << std::endl;
 			
-			while(semop(semId, incrSemRequete, 1) == -1 && errno == EINTR);
+			semop(semId, incrSemRequete, 1);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : Liberation semaphore requete" << std::endl;
 			
-			fichier << time(NULL)%10000 << "  " << numBarriere << " : Demande semaphore entree" << std::endl;
-			while(semop(semId, decrSemEntree, 1) == -1 && errno == EINTR);
-			fichier << time(NULL)%10000 << "  " << numBarriere << " : Recup semaphore entree" << std::endl;
+			for (;;)
+			{
+				fichier << time(NULL)%10000 << "  " << numBarriere << " : Demande semaphore entree" << std::endl;
+				while(semop(semId, decrSemEntree, 1) == -1 && errno == EINTR);
+				fichier << time(NULL)%10000 << "  " << numBarriere << " : Recup semaphore entree" << std::endl;
+			}
 			pidVoiturier = GarerVoiture(typeEntree);
-			fichier << time(NULL)%10000 << "  " << numBarriere << " : pidVoiturier " << pidVoiturier << std::endl;
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : pidVoiturier (else) " << pidVoiturier << std::endl;
 		}	
         
 

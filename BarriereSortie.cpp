@@ -99,7 +99,7 @@ static void handlerSigChld (int noSignal)
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
   numeroPlaceLibere = WEXITSTATUS(numeroPlaceLibere);
   listeVoiturierSortie.erase(pidFilsMort);
-  fichier << time(NULL)%10000 << "  " << "pid fils mort : " << pidFilsMort << std::endl << "Place libere : " << numeroPlaceLibere << std::endl;
+  fichier << time(NULL)%10000 << "  " << "pid fils mort : " << pidFilsMort << std::endl << time(NULL)%10000 << "  Place libere : " << numeroPlaceLibere << std::endl;
   
   // Acces au semaphore de protection de parking
   fichier << time(NULL)%10000 << "  " << "Demande acces semaphore parking" << std::endl;
@@ -232,6 +232,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   struct sigaction actionUSR2;
   actionUSR2.sa_handler = handlerSigUsr2;
   sigemptyset(&actionUSR2.sa_mask);
+  sigaddset(&actionUSR2.sa_mask, SIGCHLD);
   actionUSR2.sa_flags = 0;
   sigaction (SIGUSR2, &actionUSR2, NULL);
   
@@ -239,7 +240,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   sigset_t listeSignalDebloque;
   sigemptyset(&listeSignalDebloque);
   sigaddset(&listeSignalDebloque, SIGUSR2);
-  sigaddset(&listeSignalDebloque, SIGCHLD);
+  sigaddset(&listeSignalDebloque, SIGCHLD); // Si un voiturier meurt pendant la phase de destruction, il sera traite comme les autres lors du waitpid (non bloquand dans ce cas)
   sigprocmask(SIG_UNBLOCK, &listeSignalDebloque, NULL);
 	
 

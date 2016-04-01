@@ -38,7 +38,7 @@ static fstream fichier("LogSimulation.txt");
 static void destruction()
 {
   // Fermeture canaux (3 + 1)
-  fichier << "destruction" << std::endl;
+  fichier << time(NULL)%10000 << "  " << "destruction" << std::endl;
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
     close(descEcritureCanauxBarriereEntree[i]);
