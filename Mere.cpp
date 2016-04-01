@@ -104,7 +104,7 @@ int main(void) {
 		for (int i = 0; i < 5; i++)
 		{
 			val2 = semctl(semId, i, GETVAL, &val);
-			fichier << time(NULL)%10000 << "  " << "Indice du semaphore " << i << " : " << val << " " << val2 << std::endl;
+			fichier << time(NULL)%TEMPS_MAX << "  " << "Indice du semaphore " << i << " : " << val << " " << val2 << std::endl;
 		}
 	
 	
