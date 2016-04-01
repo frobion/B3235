@@ -94,7 +94,6 @@ static void initVoiture(Voiture* voiture)
 
 static void handlerSigChld (int noSignal)
 {
-  fichier << time(NULL)%TEMPS_MAX << "  " << "debut handlerSigChld" << std::endl;
   time_t tempsSortie = (time(NULL)) % DECIMAL_TEMPS	;
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
@@ -104,6 +103,7 @@ static void handlerSigChld (int noSignal)
   
   // Acces au semaphore de protection de parking
   fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces semaphore parking" << std::endl;
+  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop decr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Acces obtenu du semaphore parking" << std::endl;
   
@@ -114,6 +114,7 @@ static void handlerSigChld (int noSignal)
   Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
+  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop incr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   semop(semId, incrSemParking, 1);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Liberation du semaphore parking" << std::endl;
   
@@ -123,9 +124,11 @@ static void handlerSigChld (int noSignal)
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
   fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces du semaphore requete" << std::endl;
+  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Acces au semaphore requete" << std::endl;
   
+  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees apres semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Nombre de requetes : " << nbRequetesActuelles << std::endl;
   
@@ -179,7 +182,6 @@ static void handlerSigChld (int noSignal)
 
 static void handlerSigUsr2 (int noSignal)
 {
-  fichier << time(NULL)%TEMPS_MAX << "  " << "Debut handlerSigUsr2" << std::endl;
   Afficher(TypeZone::MESSAGE, "SIGUSR2 recu par sortie");
   close(descLectureCanal);
   
@@ -205,7 +207,6 @@ static void handlerSigUsr2 (int noSignal)
 void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], int shmParkingId, int shmRequeteId, int semIdParam)
 {
   // INIT
-  fichier << time(NULL)%TEMPS_MAX << "  " << "Debut barriereSortie" << std::endl;
   // Fermeture canaux inutilise
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
@@ -251,7 +252,6 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   
   for (;;)
   {
-	fichier << time(NULL)%TEMPS_MAX << "  " << "Debut boucle infini" << std::endl;
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
 	pid_t pid = SortirVoiture(numeroPlace);
 	if (pid != (pid_t) -1) // Sinon risque de fermeture de la session lors de la destruction de l'application

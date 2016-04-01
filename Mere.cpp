@@ -21,6 +21,7 @@
 
 
 int main(void) {
+	
 	fstream fichier("LogMere.txt");
 	
 	// VT220 Si SSH
