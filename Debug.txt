@@ -1,5 +1,3 @@
-check TypeUsager (-1833198880)
-immatriculation = 59
 recup semaphore barriere entree
 Mauvaise priorite d'entree
 nbPlacesOccupes = 7984 / 8407 => depend de l'heure ??

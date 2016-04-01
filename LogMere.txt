@@ -1,5 +1,5 @@
-913  Indice du semaphore 0 : 0 0
-913  Indice du semaphore 1 : 0 0
-913  Indice du semaphore 2 : 0 0
-913  Indice du semaphore 3 : 0 1
-913  Indice du semaphore 4 : 0 1
+8215  Indice du semaphore 0 : 0 0
+8215  Indice du semaphore 1 : 0 0
+8215  Indice du semaphore 2 : 0 0
+8215  Indice du semaphore 3 : 0 1
+8215  Indice du semaphore 4 : 0 1

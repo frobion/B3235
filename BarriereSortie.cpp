@@ -61,6 +61,7 @@ static int chercheRequetesActuelles(Requete* requetesActuelles)
 {
   if (requeteMPPtr->nbPlacesOccupees != NB_PLACES)
   {
+	fichier << time(NULL)%10000 << "  Nombre de places occupees : " << requeteMPPtr->nbPlacesOccupees << std::endl;
     return 0;
   }
   int nbRequetesActuelles = 0;
@@ -244,12 +245,13 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   sigprocmask(SIG_UNBLOCK, &listeSignalDebloque, NULL);
 	
 
-  fichier << time(NULL)%10000 << "  " << "Debut moteur" << std::endl;
+  
   // MOTEUR
   unsigned int numeroPlace;
   
   for (;;)
   {
+	fichier << time(NULL)%10000 << "  " << "Debut boucle infini" << std::endl;
 	while(read (descLectureCanal, &numeroPlace, sizeof(unsigned int)) == -1 && errno == EINTR);
 	pid_t pid = SortirVoiture(numeroPlace);
 	if (pid != (pid_t) -1) // Sinon risque de fermeture de la session lors de la destruction de l'application

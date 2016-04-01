@@ -37,6 +37,8 @@ const int NUM_SEM_GASTON_BERGER = 2;
 const int NUM_SEM_PARKING = 3;
 const int NUM_SEM_REQUETE = 4;
 
+const int TEMPS_MAX = 100000;
+
 #endif
 
 

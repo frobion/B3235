@@ -111,9 +111,9 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 	 numBarriere = typeEntree -1;
 	 fichier << time(NULL)%10000 << "  " << numBarriere << " : Init Entree" << std::endl;
 	 
-	 decrSemEntree[1].sem_num = numBarriere;
-	 decrSemEntree[1].sem_op = -1;
-	 decrSemEntree[1].sem_flg = 0;
+	 decrSemEntree[0].sem_num = numBarriere;
+	 decrSemEntree[0].sem_op = -1;
+	 decrSemEntree[0].sem_flg = 0;
 	 	 
 	 for(unsigned int barriereEntree = 0; barriereEntree < NB_BARRIERES_ENTREE ; barriereEntree++)
 	 {
@@ -206,6 +206,8 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         else
         {		
 			RequeteMPPtr->requetes[numBarriere].voiture = voitRecue;
+			fichier << time(NULL)%10000 << "  " << numBarriere << " :  Ecriture de la requete : " << RequeteMPPtr->requetes[numBarriere].voiture.usager << " " 
+			    << RequeteMPPtr->requetes[numBarriere].voiture.immatriculation << " " << RequeteMPPtr->requetes[numBarriere].voiture.dateArrive << std::endl;
 			RequeteMPPtr->requetes[numBarriere].barriere = typeEntree;
 			AfficherRequete(typeEntree, voitRecue.usager, heureArrivee);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : Requete barriere " << RequeteMPPtr->requetes[numBarriere].barriere << std::endl;
@@ -213,12 +215,12 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 			semop(semId, incrSemRequete, 1);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : Liberation semaphore requete" << std::endl;
 			
-			for (;;)
-			{
-				fichier << time(NULL)%10000 << "  " << numBarriere << " : Demande semaphore entree" << std::endl;
-				while(semop(semId, decrSemEntree, 1) == -1 && errno == EINTR);
-				fichier << time(NULL)%10000 << "  " << numBarriere << " : Recup semaphore entree" << std::endl;
-			}
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : Demande semaphore entree" << std::endl;
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : Valeur du semaphore avant : " << semctl(semId, numBarriere, GETVAL, NULL) << std::endl;
+			while(semop(semId, decrSemEntree, 1) == -1 && errno == EINTR);
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : Valeur du semaphore apres : " << semctl(semId, numBarriere, GETVAL, NULL) << std::endl;
+			fichier << time(NULL)%10000 << "  " << numBarriere << " : Recup semaphore entree" << std::endl;
+
 			pidVoiturier = GarerVoiture(typeEntree);
 			fichier << time(NULL)%10000 << "  " << numBarriere << " : pidVoiturier (else) " << pidVoiturier << std::endl;
 		}	

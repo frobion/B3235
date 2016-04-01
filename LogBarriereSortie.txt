@@ -1,4 +1,17 @@
-913  Debut barriereSortie
-913  Debut moteur
-947  Debut handlerSigUsr2
-947  Fin de barriereSortie
+8215  Debut barriereSortie
+8215  Debut boucle infini
+8244  appel voiturier sortie
+8244  Debut boucle infini
+8250  debut handlerSigChld
+8250  pid fils mort : 5264
+8250  Place libere : 8
+8250  Demande acces semaphore parking
+8250  Acces obtenu du semaphore parking
+8250  Liberation du semaphore parking
+8250  Demande acces du semaphore requete
+8250  Acces au semaphore requete
+8250  Nombre de places occupees : 8217
+8250  Nombre de requetes : 0
+8250  Fin sigChld
+8253  Debut handlerSigUsr2
+8253  Fin de barriereSortie
