@@ -8,3 +8,5 @@ clean.sh
 *.o
 Parking
 
+#Fichier de log
+Log*
