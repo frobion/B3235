@@ -25,9 +25,10 @@ ECHO = @echo
 RM = @rm
 MESSAGE = "Compilation terminée"
 
+.PHONY: clean log
+
 $(EXE): $(OBJ)
-	rm -vf $(LOG)
-	touch $(LOG) #Permet de réinitialiser les fichiers de logs entre chaque compilation
+	make log
 	$(LINK)  -o $(EXE) $^ $(EDLFLAGS) -ltp -lncurses -ltcl
 	$(ECHO) $(MESSAGE)
 
@@ -43,3 +44,7 @@ Entree.cpp:Entree.h config.h
 
 clean:
 	$(RM) -fv *.o $(EXE)
+	
+log:
+	rm -vf $(LOG)
+	touch $(LOG) #Permet de réinitialiser les fichiers de logs entre chaque compilation
