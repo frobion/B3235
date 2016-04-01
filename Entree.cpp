@@ -205,7 +205,9 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
         }
         else
         {		
-			RequeteMPPtr->requetes[numBarriere].voiture = voitRecue;
+			RequeteMPPtr->requetes[numBarriere].voiture.dateArrive =  voitRecue.dateArrive;
+			RequeteMPPtr->requetes[numBarriere].voiture.immatriculation =  voitRecue.immatriculation;
+			RequeteMPPtr->requetes[numBarriere].voiture.usager =  voitRecue.usager;
 			fichier << time(NULL)%TEMPS_MAX << "  " << numBarriere << " :  Ecriture de la requete : " << RequeteMPPtr->requetes[numBarriere].voiture.usager << " " 
 			    << RequeteMPPtr->requetes[numBarriere].voiture.immatriculation << " " << RequeteMPPtr->requetes[numBarriere].voiture.dateArrive << std::endl;
 			RequeteMPPtr->requetes[numBarriere].barriere = typeEntree;
