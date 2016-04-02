@@ -22,7 +22,7 @@ struct Requete
 
 struct ParkingMP
 {
-  Voiture parking [8]; 
+  Voiture parking [8];
 };
 
 struct RequeteMP
@@ -37,10 +37,9 @@ const int NUM_SEM_GASTON_BERGER = 2;
 const int NUM_SEM_PARKING = 3;
 const int NUM_SEM_REQUETE = 4;
 
+const int TEMPO = 1; // temporisation d'attente avant l'arrivee d'un nouveau vehicule
+
 const int TEMPS_MAX = 100000;
 const int DECIMAL_TEMPS = 10000;
 
 #endif
-
-
-

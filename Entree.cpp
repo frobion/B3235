@@ -255,6 +255,8 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 			    fichier[numBarriere] << time(NULL)%TEMPS_MAX << "  " << numBarriere << " : Recup semaphore entree" << std::endl;
 
 			    pidVoiturier = GarerVoiture(typeEntree);
+
+					sleep(TEMPO);
 			   //fichier[numBarriere] << time(NULL)%TEMPS_MAX << "  " << numBarriere << " : pidVoiturier (else) " << pidVoiturier << std::endl;
 
     		}
