@@ -1,3 +1,15 @@
+/*************************************************************************
+                           Mere  -  description
+                             -------------------
+    début                : 23/03/2016
+    copyright            : (C) 2016 par narsac
+    e-mail               : nathan.arsac@insa-lyon.fr
+*************************************************************************/
+
+//---------- Réalisation de la tâche <Mere> (fichier Mere.cpp)
+
+/////////////////////////////////////////////////////////////////  INCLUDE
+//-------------------------------------------------------- Include système
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/ipc.h>
@@ -11,19 +23,27 @@
 #include <iostream>
 #include <fstream>
 
+//------------------------------------------------------ Include personnel
 #include "Outils.h"
 #include "Heure.h"
 #include "config.h"
-
 #include "Simulation.h"
 #include "Entree.h"
 #include "BarriereSortie.h"
 
+///////////////////////////////////////////////////////////////////  PRIVE
+//------------------------------------------------------------- Constantes
 
+//------------------------------------------------------------------ Types
+
+//---------------------------------------------------- Variables statiques
+
+//////////////////////////////////////////////////////////////////  PUBLIC
+//---------------------------------------------------- Fonctions publiques
 int main(void) {
-	
+
 	fstream fichier("LogMere.txt");
-	
+
 	// VT220 Si SSH
 	// XTERM par défaut
 	InitialiserApplication (XTERM);
@@ -42,30 +62,30 @@ int main(void) {
 		TerminerApplication(false);
 		exit(0);
 	}
-	
-	// Blocage des signaux 
+
+	// Blocage des signaux
 	sigset_t listeSignalBloque;
     sigemptyset(&listeSignalBloque);
     sigaddset(&listeSignalBloque, SIGUSR1);
     sigaddset(&listeSignalBloque, SIGUSR2);
     sigaddset(&listeSignalBloque, SIGCHLD);
     sigprocmask(SIG_SETMASK, &listeSignalBloque, NULL);
-	
+
 
 	// ***** CREATION DES OBJETS PASSIFS  *****
-	
+
 		const char * pathname = "./Mere";
 
 	  // ----- Memoire partagee Creation
-		
+
 		// -- Memoire Parking
 		key_t cle2 = ftok(pathname, 'P');
 		int shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
-		
-		  // Attachement
+
+		  // Attachement memoire partagee parking
 		ParkingMP* ParkingMPPtr = (ParkingMP*) shmat(shmIdParking, NULL, 0);
-		
-		  // Initialisation 
+
+		  // Initialisation memoire partagee parking
 		for(unsigned int numPlace = 0 ; numPlace < 8 ; numPlace++ )
 		{
 			ParkingMPPtr->parking[numPlace].usager = AUCUN ;
@@ -76,11 +96,11 @@ int main(void) {
 		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
 		int shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
-		
-		  // Attachement
+
+		  // Attachement memoire partagee requete
 		RequeteMP* RequeteMPPtr = (RequeteMP*) shmat(shmIdRequete, NULL, 0);
-		
-		  // Initialisation 
+
+		  // Initialisation memoire partagee requete
 		for(unsigned int numRequete = 0 ; numRequete < 3 ; numRequete++ )
 		{
 			RequeteMPPtr->requetes[numRequete].voiture.usager = AUCUN ;
@@ -88,18 +108,19 @@ int main(void) {
 			RequeteMPPtr->requetes[numRequete].voiture.dateArrive =  -1 ;
 		}
 		RequeteMPPtr->nbPlacesOccupees = 0 ;
-		
-		
+
+
 		// -- Semaphore
 		cle2 = ftok(pathname, 'Q');
 		int semId = semget(cle2, 5,IPC_CREAT | 0660);
-		
+
 		  // Initialisation des semaphores
 		semctl(semId, NUM_SEM_PARKING, SETVAL, 1);
 		semctl(semId, NUM_SEM_REQUETE, SETVAL, 1);
 		semctl(semId, NUM_SEM_PROF_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_AUTRE_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_GASTON_BERGER, SETVAL, 0);
+
 		unsigned short int val;
 		int val2;
 		for (int i = 0; i < 5; i++)
@@ -107,13 +128,13 @@ int main(void) {
 			val2 = semctl(semId, i, GETVAL, &val);
 			fichier << time(NULL)%TEMPS_MAX << "  " << "Indice du semaphore " << i << " : " << val << " " << val2 << std::endl;
 		}
-	
-	
+
+
 	 // ----- Creation des canaux
-	 
+
 		int canalEntree[3][2];
 		int canalSortie[2];
-		
+
 		pipe(canalEntree[0]);
 		pipe(canalEntree[1]);
 		pipe(canalEntree[2]);
@@ -145,7 +166,7 @@ int main(void) {
 		GestionEntree(canalEntree, canalSortie, ENTREE_GASTON_BERGER, shmIdParking, shmIdRequete, semId);
 	}
 // Mere
-	else 
+	else
 	{
 
 	waitpid(pidSimu, 0, 0);
@@ -171,18 +192,17 @@ int main(void) {
 	Effacer(MESSAGE);
 
 
-	//Heure : Destruction
+	// Heure : Destruction
 	kill(pidHeure, SIGUSR2);
 	Afficher(MESSAGE,"Suppression heure");
 	waitpid(pidHeure, 0, 0);
 
 
-	//Memoire partagee  : Destruction
+	// Memoire partagee  : Destruction
 
-		// Destruction Semaphore
-    Afficher(MESSAGE,"Suppression semaphore");
+  Afficher(MESSAGE,"Suppression semaphore");
 	semctl(semId, 0, IPC_RMID, 0);
-	
+
 	Afficher(MESSAGE,"Suppression memoire Requete");
 	shmctl(shmIdRequete, IPC_RMID, 0);
 
