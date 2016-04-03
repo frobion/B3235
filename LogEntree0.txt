@@ -1,184 +1,124 @@
-16157  0 : Init Entree
-16157  0 : debut boucle infini
-16185  0 : Une voiture est arrivee et heure attribue : 6185
-16186  0 : Demande du semaphore requete
-16186  0 : Recup semaphore requete
-16186  0 : nbPlaceOccupe avant if : 2
-16186  0 : numBarriere : 0
-16186  0 : nbPlaceOccupe apres incr : 3
-16186  0 : Liberation semaphore requete
-16186  0 : debut boucle infini
-16195  0 : Appel SIGCHLD
-16195  0 : Demande semaphore requetes
-16195  0 : Recup semaphore requetes
-16195  0 : Nb places occupees : 3
-16195  0 : Liberation semaphore requetes
-16195  0 : num place : 5
-16195  0 : Demande semaphore requetes
-16195  0 : Recup semaphore requetes
-16195  0 : Nb places occupees : 3
-16195  0 : Liberation semaphore requetes
-16195  0 : Info voiture : 1 2 6185
-16195  0 : Demande semaphore parking
-16195  0 : Recup semaphore parking
-16195  0 : Demande semaphore requetes
-16195  0 : Recup semaphore requetes
-16195  0 : Usager R0 : 0
-16195  0 : Immatriculation R0 : -1
-16195  0 : Date arrivee R0 : -1
-16195  0 : Barriere R0 : 0
-16195  0 : Usager R1 : 0
-16195  0 : Immatriculation R1 : -1
-16195  0 : Date arrivee R1 : -1
-16195  0 : Barriere R1 : 0
-16195  0 : Usager R2 : 0
-16195  0 : Immatriculation R2 : -1
-16195  0 : Date arrivee R2 : -1
-16195  0 : Barriere R2 : 0
-16195  0 : Nb places occupees : 3
-16195  0 : Liberation semaphore requetes
-16195  0 : Demande semaphore requetes
-16195  0 : Recup semaphore requetes
-16195  0 : Usager R0 : 0
-16195  0 : Immatriculation R0 : -1
-16195  0 : Date arrivee R0 : -1
-16195  0 : Barriere R0 : 0
-16195  0 : Usager R1 : 0
-16195  0 : Immatriculation R1 : -1
-16195  0 : Date arrivee R1 : -1
-16195  0 : Barriere R1 : 0
-16195  0 : Usager R2 : 0
-16195  0 : Immatriculation R2 : -1
-16195  0 : Date arrivee R2 : -1
-16195  0 : Barriere R2 : 0
-16195  0 : Nb places occupees : 3
-16195  0 : Liberation semaphore requetes
-16195  0 : Liberation semaphore parking
-16195  0 : Info voiture garee SIGCHLD : 1 2 6185
-16195  0 : Demande semaphore requetes
-16195  0 : Recup semaphore requetes
-16195  0 : Nb places occupees : 3
-16195  0 : Liberation semaphore requetes
-16195  0 : Fin SIGCHLD
-16234  0 : Une voiture est arrivee et heure attribue : 6234
-16235  0 : Demande du semaphore requete
-16235  0 : Recup semaphore requete
-16235  0 : nbPlaceOccupe avant if : 6
-16235  0 : numBarriere : 0
-16235  0 : nbPlaceOccupe apres incr : 7
-16235  0 : Liberation semaphore requete
-16235  0 : debut boucle infini
-16247  0 : Appel SIGCHLD
-16247  0 : Demande semaphore requetes
-16247  0 : Recup semaphore requetes
-16247  0 : Nb places occupees : 7
-16247  0 : Liberation semaphore requetes
-16247  0 : num place : 8
-16247  0 : Demande semaphore requetes
-16247  0 : Recup semaphore requetes
-16247  0 : Nb places occupees : 7
-16247  0 : Liberation semaphore requetes
-16247  0 : Info voiture : 1 6 6234
-16247  0 : Demande semaphore parking
-16247  0 : Recup semaphore parking
-16247  0 : Demande semaphore requetes
-16247  0 : Recup semaphore requetes
-16247  0 : Usager R0 : 0
-16247  0 : Immatriculation R0 : -1
-16247  0 : Date arrivee R0 : -1
-16247  0 : Barriere R0 : 0
-16247  0 : Usager R1 : 0
-16247  0 : Immatriculation R1 : -1
-16247  0 : Date arrivee R1 : -1
-16247  0 : Barriere R1 : 0
-16247  0 : Usager R2 : 0
-16247  0 : Immatriculation R2 : -1
-16247  0 : Date arrivee R2 : -1
-16247  0 : Barriere R2 : 0
-16247  0 : Nb places occupees : 7
-16247  0 : Liberation semaphore requetes
-16247  0 : Demande semaphore requetes
-16247  0 : Recup semaphore requetes
-16247  0 : Usager R0 : 0
-16247  0 : Immatriculation R0 : -1
-16247  0 : Date arrivee R0 : -1
-16247  0 : Barriere R0 : 0
-16247  0 : Usager R1 : 0
-16247  0 : Immatriculation R1 : -1
-16247  0 : Date arrivee R1 : -1
-16247  0 : Barriere R1 : 0
-16247  0 : Usager R2 : 0
-16247  0 : Immatriculation R2 : -1
-16247  0 : Date arrivee R2 : -1
-16247  0 : Barriere R2 : 0
-16247  0 : Nb places occupees : 7
-16247  0 : Liberation semaphore requetes
-16247  0 : Liberation semaphore parking
-16247  0 : Info voiture garee SIGCHLD : 1 6 6234
-16247  0 : Demande semaphore requetes
-16247  0 : Recup semaphore requetes
-16247  0 : Nb places occupees : 7
-16247  0 : Liberation semaphore requetes
-16247  0 : Fin SIGCHLD
-16248  0 : Une voiture est arrivee et heure attribue : 6248
-16249  0 : Demande du semaphore requete
-16249  0 : Recup semaphore requete
-16249  0 : nbPlaceOccupe avant if : 7
-16249  0 : numBarriere : 0
-16249  0 : nbPlaceOccupe apres incr : 8
-16249  0 : Liberation semaphore requete
-16249  0 : debut boucle infini
-16252  0 : Appel SIGCHLD
-16252  0 : Demande semaphore requetes
-16252  0 : Recup semaphore requetes
-16252  0 : Nb places occupees : 8
-16252  0 : Liberation semaphore requetes
-16252  0 : num place : 1
-16252  0 : Demande semaphore requetes
-16252  0 : Recup semaphore requetes
-16252  0 : Nb places occupees : 8
-16252  0 : Liberation semaphore requetes
-16252  0 : Info voiture : 1 7 6248
-16252  0 : Demande semaphore parking
-16252  0 : Recup semaphore parking
-16252  0 : Demande semaphore requetes
-16252  0 : Recup semaphore requetes
-16252  0 : Usager R0 : 0
-16252  0 : Immatriculation R0 : -1
-16252  0 : Date arrivee R0 : -1
-16252  0 : Barriere R0 : 0
-16252  0 : Usager R1 : 0
-16252  0 : Immatriculation R1 : -1
-16252  0 : Date arrivee R1 : -1
-16252  0 : Barriere R1 : 0
-16252  0 : Usager R2 : 0
-16252  0 : Immatriculation R2 : -1
-16252  0 : Date arrivee R2 : -1
-16252  0 : Barriere R2 : 0
-16252  0 : Nb places occupees : 8
-16252  0 : Liberation semaphore requetes
-16252  0 : Demande semaphore requetes
-16252  0 : Recup semaphore requetes
-16252  0 : Usager R0 : 0
-16252  0 : Immatriculation R0 : -1
-16252  0 : Date arrivee R0 : -1
-16252  0 : Barriere R0 : 0
-16252  0 : Usager R1 : 0
-16252  0 : Immatriculation R1 : -1
-16252  0 : Date arrivee R1 : -1
-16252  0 : Barriere R1 : 0
-16252  0 : Usager R2 : 0
-16252  0 : Immatriculation R2 : -1
-16252  0 : Date arrivee R2 : -1
-16252  0 : Barriere R2 : 0
-16252  0 : Nb places occupees : 8
-16252  0 : Liberation semaphore requetes
-16252  0 : Liberation semaphore parking
-16252  0 : Info voiture garee SIGCHLD : 1 7 6248
-16252  0 : Demande semaphore requetes
-16252  0 : Recup semaphore requetes
-16252  0 : Nb places occupees : 8
-16252  0 : Liberation semaphore requetes
-16252  0 : Fin SIGCHLD
-16256  0 : Appel SIGUSR2
-16256  0 : Fin SIGUSR2
+16984  0 : Init Entree
+16984  0 : debut boucle infini
+17016  0 : Une voiture est arrivee et heure attribue : 7016
+17017  0 : Demande du semaphore requete
+17017  0 : Recup semaphore requete
+17017  0 : nbPlaceOccupe avant if : 2
+17017  0 : numBarriere : 0
+17017  0 : nbPlaceOccupe apres incr : 3
+17017  0 : Liberation semaphore requete
+17017  0 : debut boucle infini
+17022  0 : Appel SIGCHLD
+17022  0 : Demande semaphore requetes
+17022  0 : Recup semaphore requetes
+17022  0 : Nb places occupees : 3
+17022  0 : Liberation semaphore requetes
+17022  0 : num place : 4
+17022  0 : Demande semaphore requetes
+17022  0 : Recup semaphore requetes
+17022  0 : Nb places occupees : 3
+17022  0 : Liberation semaphore requetes
+17022  0 : Info voiture : 1 2 7016
+17022  0 : Demande semaphore parking
+17022  0 : Recup semaphore parking
+17022  0 : Demande semaphore requetes
+17022  0 : Recup semaphore requetes
+17022  0 : Usager R0 : 0
+17022  0 : Immatriculation R0 : -1
+17022  0 : Date arrivee R0 : -1
+17022  0 : Barriere R0 : 0
+17022  0 : Usager R1 : 0
+17022  0 : Immatriculation R1 : -1
+17022  0 : Date arrivee R1 : -1
+17022  0 : Barriere R1 : 0
+17022  0 : Usager R2 : 0
+17022  0 : Immatriculation R2 : -1
+17022  0 : Date arrivee R2 : -1
+17022  0 : Barriere R2 : 0
+17022  0 : Nb places occupees : 3
+17022  0 : Liberation semaphore requetes
+17022  0 : Demande semaphore requetes
+17022  0 : Recup semaphore requetes
+17022  0 : Usager R0 : 0
+17022  0 : Immatriculation R0 : -1
+17022  0 : Date arrivee R0 : -1
+17022  0 : Barriere R0 : 0
+17022  0 : Usager R1 : 0
+17022  0 : Immatriculation R1 : -1
+17022  0 : Date arrivee R1 : -1
+17022  0 : Barriere R1 : 0
+17022  0 : Usager R2 : 0
+17022  0 : Immatriculation R2 : -1
+17022  0 : Date arrivee R2 : -1
+17022  0 : Barriere R2 : 0
+17022  0 : Nb places occupees : 3
+17022  0 : Liberation semaphore requetes
+17022  0 : Liberation semaphore parking
+17022  0 : Info voiture garee SIGCHLD : 1 2 7016
+17022  0 : Demande semaphore requetes
+17022  0 : Recup semaphore requetes
+17022  0 : Nb places occupees : 3
+17022  0 : Liberation semaphore requetes
+17022  0 : Fin SIGCHLD
+17058  0 : Une voiture est arrivee et heure attribue : 7058
+17059  0 : Demande du semaphore requete
+17059  0 : Recup semaphore requete
+17059  0 : nbPlaceOccupe avant if : 6
+17059  0 : numBarriere : 0
+17059  0 : nbPlaceOccupe apres incr : 7
+17059  0 : Liberation semaphore requete
+17059  0 : debut boucle infini
+17070  0 : Appel SIGCHLD
+17070  0 : Demande semaphore requetes
+17070  0 : Recup semaphore requetes
+17070  0 : Nb places occupees : 7
+17070  0 : Liberation semaphore requetes
+17070  0 : num place : 7
+17070  0 : Demande semaphore requetes
+17070  0 : Recup semaphore requetes
+17070  0 : Nb places occupees : 7
+17070  0 : Liberation semaphore requetes
+17070  0 : Info voiture : 1 6 7058
+17070  0 : Demande semaphore parking
+17070  0 : Recup semaphore parking
+17070  0 : Demande semaphore requetes
+17070  0 : Recup semaphore requetes
+17070  0 : Usager R0 : 0
+17070  0 : Immatriculation R0 : -1
+17070  0 : Date arrivee R0 : -1
+17070  0 : Barriere R0 : 0
+17070  0 : Usager R1 : 0
+17070  0 : Immatriculation R1 : -1
+17070  0 : Date arrivee R1 : -1
+17070  0 : Barriere R1 : 0
+17070  0 : Usager R2 : 0
+17070  0 : Immatriculation R2 : -1
+17070  0 : Date arrivee R2 : -1
+17070  0 : Barriere R2 : 0
+17070  0 : Nb places occupees : 7
+17070  0 : Liberation semaphore requetes
+17070  0 : Demande semaphore requetes
+17070  0 : Recup semaphore requetes
+17070  0 : Usager R0 : 0
+17070  0 : Immatriculation R0 : -1
+17070  0 : Date arrivee R0 : -1
+17070  0 : Barriere R0 : 0
+17070  0 : Usager R1 : 0
+17070  0 : Immatriculation R1 : -1
+17070  0 : Date arrivee R1 : -1
+17070  0 : Barriere R1 : 0
+17070  0 : Usager R2 : 0
+17070  0 : Immatriculation R2 : -1
+17070  0 : Date arrivee R2 : -1
+17070  0 : Barriere R2 : 0
+17070  0 : Nb places occupees : 7
+17070  0 : Liberation semaphore requetes
+17070  0 : Liberation semaphore parking
+17070  0 : Info voiture garee SIGCHLD : 1 6 7058
+17070  0 : Demande semaphore requetes
+17070  0 : Recup semaphore requetes
+17070  0 : Nb places occupees : 7
+17070  0 : Liberation semaphore requetes
+17070  0 : Fin SIGCHLD
+17083  0 : Appel SIGUSR2
+17083  0 : Fin SIGUSR2
