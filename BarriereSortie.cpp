@@ -103,7 +103,7 @@ static void handlerSigChld (int noSignal)
   
   // Acces au semaphore de protection de parking
   fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces semaphore parking" << std::endl;
-  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop decr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop decr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Acces obtenu du semaphore parking" << std::endl;
   
@@ -114,7 +114,7 @@ static void handlerSigChld (int noSignal)
   Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
-  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop incr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop incr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   semop(semId, incrSemParking, 1);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Liberation du semaphore parking" << std::endl;
   
@@ -124,7 +124,7 @@ static void handlerSigChld (int noSignal)
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
   fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces du semaphore requete" << std::endl;
-  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
   fichier << time(NULL)%TEMPS_MAX << "  " << "Acces au semaphore requete" << std::endl;
   

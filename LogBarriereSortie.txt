@@ -1,17 +1,1 @@
-9303  Debut barriereSortie
-9303  Debut boucle infini
-9339  appel voiturier sortie
-9339  Debut boucle infini
-9351  debut handlerSigChld
-9351  pid fils mort : 8020
-9351  Place libere : 4
-9351  Demande acces semaphore parking
-9351  Acces obtenu du semaphore parking
-9351  Liberation du semaphore parking
-9351  Demande acces du semaphore requete
-9351  Acces au semaphore requete
-9351  Nombre de places occupees : 4294967295
-9351  Nombre de requetes : 0
-9351  Fin sigChld
-9360  Debut handlerSigUsr2
-9360  Fin de barriereSortie
+99559  Fin de barriereSortie

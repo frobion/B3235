@@ -13,7 +13,7 @@ EDLFLAGS = $(LIB)
 
 
 #Fichiers
-LOG=LogEntree.txt LogSimulation.txt LogBarriereSortie.txt LogMere.txt
+LOG=LogEntree0.txt LogEntree1.txt LogEntree2.txt LogSimulation.txt LogBarriereSortie.txt LogMere.txt
 
 SRC =
 INT = Mere.h Simulation.h  BarriereSortie.h Entree.h #Mettre les .h ici
@@ -45,6 +45,6 @@ Entree.cpp:Entree.h config.h
 clean:
 	$(RM) -fv *.o $(EXE)
 	
-log:
-	rm -vf $(LOG)
-	touch $(LOG) #Permet de réinitialiser les fichiers de logs entre chaque compilation
+log: #Permet de réinitialiser les fichiers de logs entre chaque compilation
+	$(RM) -fv $(LOG)
+	touch $(LOG)
