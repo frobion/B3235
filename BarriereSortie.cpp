@@ -108,10 +108,10 @@ static void handlerSigChld (int noSignal)
   fichier << time(NULL)%TEMPS_MAX << "  " << "Acces obtenu du semaphore parking" << std::endl;
   
   // Remise de la place dans l'etat sans voiture
-  AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere].usager, parkingMPPtr->parking[numeroPlaceLibere].immatriculation, 
-      parkingMPPtr->parking[numeroPlaceLibere].dateArrive, tempsSortie);
-  initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere]));
-  Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
+  AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere - 1].usager, parkingMPPtr->parking[numeroPlaceLibere - 1].immatriculation, 
+      parkingMPPtr->parking[numeroPlaceLibere - 1].dateArrive, tempsSortie);
+  initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere - 1]));
+  Effacer((TypeZone) numeroPlaceLibere); // A verifier Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
   //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop incr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;

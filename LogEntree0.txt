@@ -1,0 +1,184 @@
+12676  0 : Init Entree
+12676  0 : debut boucle infini
+12706  0 : Une voiture est arrivee et heure attribue : 2706
+12707  0 : Demande du semaphore requete
+12707  0 : Recup semaphore requete
+12707  0 : nbPlaceOccupe avant if : 2
+12707  0 : numBarriere : 0
+12707  0 : nbPlaceOccupe apres incr : 3
+12707  0 : Liberation semaphore requete
+12707  0 : debut boucle infini
+12712  0 : Appel SIGCHLD
+12712  0 : Demande semaphore requetes
+12712  0 : Recup semaphore requetes
+12712  0 : Nb places occupees : 3
+12712  0 : Liberation semaphore requetes
+12712  0 : num place : 4
+12712  0 : Demande semaphore requetes
+12712  0 : Recup semaphore requetes
+12712  0 : Nb places occupees : 3
+12712  0 : Liberation semaphore requetes
+12712  0 : Info voiture : 1 2 2706
+12712  0 : Demande semaphore parking
+12712  0 : Recup semaphore parking
+12712  0 : Demande semaphore requetes
+12712  0 : Recup semaphore requetes
+12712  0 : Usager R0 : 0
+12712  0 : Immatriculation R0 : -1
+12712  0 : Date arrivee R0 : -1
+12712  0 : Barriere R0 : 0
+12712  0 : Usager R1 : 0
+12712  0 : Immatriculation R1 : -1
+12712  0 : Date arrivee R1 : -1
+12712  0 : Barriere R1 : 0
+12712  0 : Usager R2 : 0
+12712  0 : Immatriculation R2 : -1
+12712  0 : Date arrivee R2 : -1
+12712  0 : Barriere R2 : 0
+12712  0 : Nb places occupees : 3
+12712  0 : Liberation semaphore requetes
+12712  0 : Demande semaphore requetes
+12712  0 : Recup semaphore requetes
+12712  0 : Usager R0 : 0
+12712  0 : Immatriculation R0 : -1
+12712  0 : Date arrivee R0 : -1
+12712  0 : Barriere R0 : 0
+12712  0 : Usager R1 : 0
+12712  0 : Immatriculation R1 : -1
+12712  0 : Date arrivee R1 : -1
+12712  0 : Barriere R1 : 0
+12712  0 : Usager R2 : 0
+12712  0 : Immatriculation R2 : -1
+12712  0 : Date arrivee R2 : -1
+12712  0 : Barriere R2 : 0
+12712  0 : Nb places occupees : 3
+12712  0 : Liberation semaphore requetes
+12712  0 : Liberation semaphore parking
+12712  0 : Info voiture garee SIGCHLD : 1 2 2706
+12712  0 : Demande semaphore requetes
+12712  0 : Recup semaphore requetes
+12712  0 : Nb places occupees : 3
+12712  0 : Liberation semaphore requetes
+12712  0 : Fin SIGCHLD
+12744  0 : Une voiture est arrivee et heure attribue : 2744
+12745  0 : Demande du semaphore requete
+12745  0 : Recup semaphore requete
+12745  0 : nbPlaceOccupe avant if : 6
+12745  0 : numBarriere : 0
+12745  0 : nbPlaceOccupe apres incr : 7
+12745  0 : Liberation semaphore requete
+12745  0 : debut boucle infini
+12755  0 : Appel SIGCHLD
+12755  0 : Demande semaphore requetes
+12755  0 : Recup semaphore requetes
+12755  0 : Nb places occupees : 7
+12755  0 : Liberation semaphore requetes
+12755  0 : num place : 5
+12755  0 : Demande semaphore requetes
+12755  0 : Recup semaphore requetes
+12755  0 : Nb places occupees : 7
+12755  0 : Liberation semaphore requetes
+12755  0 : Info voiture : 1 6 2744
+12755  0 : Demande semaphore parking
+12755  0 : Recup semaphore parking
+12755  0 : Demande semaphore requetes
+12755  0 : Recup semaphore requetes
+12755  0 : Usager R0 : 0
+12755  0 : Immatriculation R0 : -1
+12755  0 : Date arrivee R0 : -1
+12755  0 : Barriere R0 : 0
+12755  0 : Usager R1 : 0
+12755  0 : Immatriculation R1 : -1
+12755  0 : Date arrivee R1 : -1
+12755  0 : Barriere R1 : 0
+12755  0 : Usager R2 : 0
+12755  0 : Immatriculation R2 : -1
+12755  0 : Date arrivee R2 : -1
+12755  0 : Barriere R2 : 0
+12755  0 : Nb places occupees : 7
+12755  0 : Liberation semaphore requetes
+12755  0 : Demande semaphore requetes
+12755  0 : Recup semaphore requetes
+12755  0 : Usager R0 : 0
+12755  0 : Immatriculation R0 : -1
+12755  0 : Date arrivee R0 : -1
+12755  0 : Barriere R0 : 0
+12755  0 : Usager R1 : 0
+12755  0 : Immatriculation R1 : -1
+12755  0 : Date arrivee R1 : -1
+12755  0 : Barriere R1 : 0
+12755  0 : Usager R2 : 0
+12755  0 : Immatriculation R2 : -1
+12755  0 : Date arrivee R2 : -1
+12755  0 : Barriere R2 : 0
+12755  0 : Nb places occupees : 7
+12755  0 : Liberation semaphore requetes
+12755  0 : Liberation semaphore parking
+12755  0 : Info voiture garee SIGCHLD : 1 6 2744
+12755  0 : Demande semaphore requetes
+12755  0 : Recup semaphore requetes
+12755  0 : Nb places occupees : 7
+12755  0 : Liberation semaphore requetes
+12755  0 : Fin SIGCHLD
+12756  0 : Une voiture est arrivee et heure attribue : 2756
+12757  0 : Demande du semaphore requete
+12757  0 : Recup semaphore requete
+12757  0 : nbPlaceOccupe avant if : 7
+12757  0 : numBarriere : 0
+12757  0 : nbPlaceOccupe apres incr : 8
+12757  0 : Liberation semaphore requete
+12757  0 : debut boucle infini
+12760  0 : Appel SIGCHLD
+12760  0 : Demande semaphore requetes
+12760  0 : Recup semaphore requetes
+12760  0 : Nb places occupees : 8
+12760  0 : Liberation semaphore requetes
+12760  0 : num place : 1
+12760  0 : Demande semaphore requetes
+12760  0 : Recup semaphore requetes
+12760  0 : Nb places occupees : 8
+12760  0 : Liberation semaphore requetes
+12760  0 : Info voiture : 1 7 2756
+12760  0 : Demande semaphore parking
+12760  0 : Recup semaphore parking
+12760  0 : Demande semaphore requetes
+12760  0 : Recup semaphore requetes
+12760  0 : Usager R0 : 0
+12760  0 : Immatriculation R0 : -1
+12760  0 : Date arrivee R0 : -1
+12760  0 : Barriere R0 : 0
+12760  0 : Usager R1 : 0
+12760  0 : Immatriculation R1 : -1
+12760  0 : Date arrivee R1 : -1
+12760  0 : Barriere R1 : 0
+12760  0 : Usager R2 : 0
+12760  0 : Immatriculation R2 : -1
+12760  0 : Date arrivee R2 : -1
+12760  0 : Barriere R2 : 0
+12760  0 : Nb places occupees : 8
+12760  0 : Liberation semaphore requetes
+12760  0 : Demande semaphore requetes
+12760  0 : Recup semaphore requetes
+12760  0 : Usager R0 : 0
+12760  0 : Immatriculation R0 : -1
+12760  0 : Date arrivee R0 : -1
+12760  0 : Barriere R0 : 0
+12760  0 : Usager R1 : 0
+12760  0 : Immatriculation R1 : -1
+12760  0 : Date arrivee R1 : -1
+12760  0 : Barriere R1 : 0
+12760  0 : Usager R2 : 0
+12760  0 : Immatriculation R2 : -1
+12760  0 : Date arrivee R2 : -1
+12760  0 : Barriere R2 : 0
+12760  0 : Nb places occupees : 8
+12760  0 : Liberation semaphore requetes
+12760  0 : Liberation semaphore parking
+12760  0 : Info voiture garee SIGCHLD : 1 7 2756
+12760  0 : Demande semaphore requetes
+12760  0 : Recup semaphore requetes
+12760  0 : Nb places occupees : 8
+12760  0 : Liberation semaphore requetes
+12760  0 : Fin SIGCHLD
+12761  0 : Appel SIGUSR2
+12761  0 : Fin SIGUSR2

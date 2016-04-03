@@ -74,12 +74,13 @@ int main(void) {
 
 	// ***** CREATION DES OBJETS PASSIFS  *****
 
-		const char * pathname = "./Mere";
+		const char * pathname = "./Parking";
 
 	  // ----- Memoire partagee Creation
 
 		// -- Memoire Parking
 		key_t cle2 = ftok(pathname, 'P');
+		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle2 : " << cle2 << std::endl;
 		int shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
 
 		  // Attachement memoire partagee parking
@@ -95,6 +96,7 @@ int main(void) {
 
 		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
+		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle3" << cle3 << std::endl;
 		int shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
 
 		  // Attachement memoire partagee requete
