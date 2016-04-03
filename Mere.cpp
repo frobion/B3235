@@ -96,7 +96,7 @@ int main(void) {
 
 		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
-		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle3" << cle3 << std::endl;
+		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle3 : " << cle3 << std::endl;
 		int shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
 
 		  // Attachement memoire partagee requete
