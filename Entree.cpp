@@ -11,6 +11,7 @@
 /////////////////////////////////////////////////////////////////  INCLUDE
 //-------------------------------------------------------- Include système
 #include <sys/msg.h>
+#include <sys/sem.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/shm.h>
@@ -21,9 +22,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-#include <fstream>
-#include <iostream>
-
 //------------------------------------------------------ Include personnel
 #include "Entree.h"
 #include "Outils.h"
@@ -31,6 +29,9 @@
 
 ///////////////////////////////////////////////////////////////////  PRIVE
 //------------------------------------------------------------- Constantes
+
+// Temporisation d'attente avant l'arrivee d'un nouveau vehicule
+const int TEMPO = 1;
 
 //------------------------------------------------------------------ Types
 struct pidVoiture
@@ -59,7 +60,6 @@ static struct sembuf decrSemEntree [1];
 // ------ Handler SIGUSR2 --------
 static void HandlerUSR2 ( int noSig )
 {
-  //  DESTRUCTION
   // Destruction de tous les deplacements
   for(unsigned int i = 0; i < listeFils.size(); i++)
   {
@@ -77,6 +77,7 @@ static void HandlerUSR2 ( int noSig )
   exit(0);
 }
 
+// ------ Handler SIGCHLD --------
 static void HandlerCHLD(int noSig)
 {
 	int numPlace;
@@ -97,6 +98,7 @@ static void HandlerCHLD(int noSig)
 
 	while(semop(semId, decrSemParking, 1) == -1 && errno == EINTR);
 	
+	// Mise a jour memoire partagee
 	ParkingMPPtr->parking[numPlace - 1] = voitureGarer;
 
 	semop(semId, incrSemParking, 1);
@@ -183,8 +185,8 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 
         // On recupere le semaphore de Requete
         while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
+        
         // Si y a de une place de libre on gare la voiture, sinon on emet une requete et on attend qu'une place ce libere
-	
 	if(RequeteMPPtr->nbPlacesOccupees < NB_PLACES )
         {
 			    RequeteMPPtr->nbPlacesOccupees++;
@@ -209,7 +211,7 @@ void GestionEntree(int canalEntree[][2], int canalSortie[2], TypeBarriere typeEn
 
         // on garde le pid du Voiturier
         struct pidVoiture mapPidVoiture = {pidVoiturier, voitRecue};
-		    listeFils.push_back(mapPidVoiture);
+		listeFils.push_back(mapPidVoiture);
 
     }
 }

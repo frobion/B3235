@@ -11,7 +11,7 @@
 
 //------------------------------------------------------------------------
 // Rôle de la tâche <Entree>
-//	La tache Entrée permet de gérer les voituriers qui rentrent dans le
+//	La tache Entrée permet de gérer les voitures qui rentrent dans le
 //	Parking
 //------------------------------------------------------------------------
 

@@ -20,9 +20,6 @@
 #include <unistd.h>
 #include <signal.h>
 
-#include <iostream>
-#include <fstream>
-
 //------------------------------------------------------ Include personnel
 #include "Outils.h"
 #include "Heure.h"
@@ -42,19 +39,16 @@
 //---------------------------------------------------- Fonctions publiques
 int main(void) {
 
-
-	// VT220 Si SSH
-	// XTERM par défaut
 	InitialiserApplication (XTERM);
 
-	//Liste des ID Processus
+	// Liste des ID Processus
 	pid_t pidHeure;         //Heure
     pid_t pidSimu;          //Simulation
 	pid_t pidEntrees [3];   //Entrees
 	pid_t pidSortie; 		//Sortie
 
 
-	//Heure : Creation
+	// Heure : Creation
 	pidHeure = ActiverHeure();
 	if (pidHeure == -1)
 	{
@@ -191,7 +185,7 @@ int main(void) {
 
 	// Memoire partagee  : Destruction
 
-  Afficher(MESSAGE,"Suppression semaphore");
+    Afficher(MESSAGE,"Suppression semaphore");
 	semctl(semId, 0, IPC_RMID, 0);
 
 	Afficher(MESSAGE,"Suppression memoire Requete");
@@ -201,7 +195,7 @@ int main(void) {
 	shmctl(shmIdParking, IPC_RMID, 0);
 
 
-	// true pour les tests, false pour la version finale
+	
 	TerminerApplication(true);
 
 	exit(0);
