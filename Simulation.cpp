@@ -50,10 +50,7 @@ static void destruction()
 //---------------------------------------------------- Fonctions publiques
 
 void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
-{
-  // TODO INIT
-  
-  compteurImmatriculation = 0;
+{  
   // Fermeture de canaux en lecture (3 + 1)
   for (unsigned int i = 0; i < NB_BARRIERES_ENTREE; i++)
   {
@@ -63,7 +60,8 @@ void Simulation(int canauxBarriereEntree[][2], int canalBarriereSortie[])
   close(canalBarriereSortie[0]);
   descEcritureCanalBarriereSortie = canalBarriereSortie[1];
  
- 
+  compteurImmatriculation = 0;
+  
   // Phase moteur
   for(;;)
   {
@@ -116,6 +114,5 @@ void Commande (char code, unsigned int valeur)
 	}
     default:
       Afficher(MESSAGE, "Commande: code inconnue");
-      
   }
 }

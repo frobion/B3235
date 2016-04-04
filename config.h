@@ -3,7 +3,6 @@
 
 
 #include <ctime>
-#include <sys/sem.h>
 
 #include "Outils.h"
 
@@ -36,8 +35,6 @@ const int NUM_SEM_AUTRE_BLAISE_PASCAL = 1;
 const int NUM_SEM_GASTON_BERGER = 2;
 const int NUM_SEM_PARKING = 3;
 const int NUM_SEM_REQUETE = 4;
-
-const int TEMPO = 1; // temporisation d'attente avant l'arrivee d'un nouveau vehicule
 
 const int TEMPS_MAX = 10000;
 

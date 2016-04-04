@@ -21,9 +21,6 @@
 #include <limits.h>
 #include <errno.h>
 
-#include <iostream>
-#include <fstream>
-
 //------------------------------------------------------ Include personnel
 #include "BarriereSortie.h"
 #include "config.h"
@@ -104,7 +101,7 @@ static void handlerSigChld (int noSignal)
   AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere - 1].usager, parkingMPPtr->parking[numeroPlaceLibere - 1].immatriculation, 
       parkingMPPtr->parking[numeroPlaceLibere - 1].dateArrive, tempsSortie);
   initVoiture(&(parkingMPPtr->parking[numeroPlaceLibere - 1]));
-  Effacer((TypeZone) numeroPlaceLibere); // A verifier Correspond a la bonne valeur de la zone de l'enum
+  Effacer((TypeZone) numeroPlaceLibere); // Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
   semop(semId, incrSemParking, 1);
@@ -117,7 +114,6 @@ static void handlerSigChld (int noSignal)
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
   
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
-  
   if (nbRequetesActuelles == 0)
   {
     requeteMPPtr->nbPlacesOccupees--;
@@ -210,7 +206,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   struct sigaction actionUSR2;
   actionUSR2.sa_handler = handlerSigUsr2;
   sigemptyset(&actionUSR2.sa_mask);
-  sigaddset(&actionUSR2.sa_mask, SIGCHLD);
+  sigaddset(&actionUSR2.sa_mask, SIGCHLD); // Si un voiturier meurt pendant la phase de destruction, il sera traite comme les autres lors du waitpid (non bloquand dans ce cas)
   actionUSR2.sa_flags = 0;
   sigaction (SIGUSR2, &actionUSR2, NULL);
   
@@ -218,7 +214,7 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
   sigset_t listeSignalDebloque;
   sigemptyset(&listeSignalDebloque);
   sigaddset(&listeSignalDebloque, SIGUSR2);
-  sigaddset(&listeSignalDebloque, SIGCHLD); // Si un voiturier meurt pendant la phase de destruction, il sera traite comme les autres lors du waitpid (non bloquand dans ce cas)
+  sigaddset(&listeSignalDebloque, SIGCHLD);
   sigprocmask(SIG_UNBLOCK, &listeSignalDebloque, NULL);
 	
 
