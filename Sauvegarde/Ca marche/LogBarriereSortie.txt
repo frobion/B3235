@@ -1,0 +1,244 @@
+17465  appel voiturier sortie
+17471  pid fils mort : 21969
+17471  Place libere : 8
+17471  Demande acces semaphore parking
+17471  Acces obtenu du semaphore parking
+17471  Liberation du semaphore parking
+17471  Demande acces du semaphore requete
+17471  Acces au semaphore requete
+17471  Nombre de places occupees apres semop : 8
+17471  Nombre de requetes : 1
+17471  Barriere de la meilleur requete : 2
+17471  Reveil AUTRE_BLAISE_PASCAL
+17471  Fin sigChld
+17487  appel voiturier sortie
+17493  pid fils mort : 21972
+17493  Place libere : 8
+17493  Demande acces semaphore parking
+17493  Acces obtenu du semaphore parking
+17493  Liberation du semaphore parking
+17493  Demande acces du semaphore requete
+17493  Acces au semaphore requete
+17493  Nombre de places occupees apres semop : 8
+17493  Nombre de requetes : 2
+17493  Barriere de la meilleur requete : 1
+17493  Reveil PROF_BLAISE_PASCAL
+17493  Fin sigChld
+17502  appel voiturier sortie
+17509  pid fils mort : 21977
+17509  Place libere : 7
+17509  Demande acces semaphore parking
+17509  Acces obtenu du semaphore parking
+17509  Liberation du semaphore parking
+17509  Demande acces du semaphore requete
+17509  Acces au semaphore requete
+17509  Nombre de places occupees apres semop : 8
+17509  Nombre de requetes : 2
+17509  Barriere de la meilleur requete : 3
+17509  Reveil ENTREE_GASTON_BERGER
+17509  Fin sigChld
+17513  appel voiturier sortie
+17515  appel voiturier sortie
+17516  appel voiturier sortie
+17521  pid fils mort : 21980
+17521  Place libere : 6
+17521  Demande acces semaphore parking
+17521  Acces obtenu du semaphore parking
+17521  Liberation du semaphore parking
+17521  Demande acces du semaphore requete
+17521  Acces au semaphore requete
+17521  Nombre de places occupees apres semop : 8
+17521  Nombre de requetes : 2
+17521  Barriere de la meilleur requete : 2
+17521  Reveil AUTRE_BLAISE_PASCAL
+17521  Fin sigChld
+17523  pid fils mort : 21982
+17523  Place libere : 5
+17523  Demande acces semaphore parking
+17523  Acces obtenu du semaphore parking
+17523  Liberation du semaphore parking
+17523  Demande acces du semaphore requete
+17523  Acces au semaphore requete
+17523  Nombre de places occupees apres semop : 8
+17523  Nombre de requetes : 1
+17523  Barriere de la meilleur requete : 3
+17523  Reveil ENTREE_GASTON_BERGER
+17523  Fin sigChld
+17528  pid fils mort : 21981
+17528  Place libere : 4
+17528  Demande acces semaphore parking
+17528  Acces obtenu du semaphore parking
+17528  Liberation du semaphore parking
+17528  Demande acces du semaphore requete
+17528  Acces au semaphore requete
+17528  Nombre de places occupees apres semop : 8
+17528  Nombre de requetes : 0
+17528  Fin sigChld
+17544  appel voiturier sortie
+17545  appel voiturier sortie
+17545  appel voiturier sortie
+17546  appel voiturier sortie
+17546  appel voiturier sortie
+17546  appel voiturier sortie
+17546  appel voiturier sortie
+17547  appel voiturier sortie
+17553  pid fils mort : 21996
+17553  Place libere : 8
+17553  Demande acces semaphore parking
+17553  Acces obtenu du semaphore parking
+17553  Liberation du semaphore parking
+17553  Demande acces du semaphore requete
+17553  Acces au semaphore requete
+17553  Nombre de places occupees apres semop : 8
+17553  Nombre de requetes : 3
+17553  Barriere de la meilleur requete : 1
+17553  Reveil PROF_BLAISE_PASCAL
+17553  Fin sigChld
+17554  pid fils mort : 21995
+17554  Place libere : 7
+17554  Demande acces semaphore parking
+17554  Acces obtenu du semaphore parking
+17554  Liberation du semaphore parking
+17554  Demande acces du semaphore requete
+17554  Acces au semaphore requete
+17554  Nombre de places occupees apres semop : 8
+17554  Nombre de requetes : 2
+17554  Barriere de la meilleur requete : 3
+17554  Reveil ENTREE_GASTON_BERGER
+17554  Fin sigChld
+17556  pid fils mort : 21994
+17556  Place libere : 6
+17556  Demande acces semaphore parking
+17556  Acces obtenu du semaphore parking
+17556  Liberation du semaphore parking
+17556  Demande acces du semaphore requete
+17556  Acces au semaphore requete
+17556  Nombre de places occupees apres semop : 8
+17556  Nombre de requetes : 2
+17556  Barriere de la meilleur requete : 1
+17556  Reveil PROF_BLAISE_PASCAL
+17556  Fin sigChld
+17557  pid fils mort : 21993
+17557  Place libere : 5
+17557  Demande acces semaphore parking
+17557  Acces obtenu du semaphore parking
+17557  Liberation du semaphore parking
+17557  Demande acces du semaphore requete
+17557  Acces au semaphore requete
+17557  Nombre de places occupees apres semop : 8
+17557  Nombre de requetes : 2
+17557  Barriere de la meilleur requete : 3
+17557  Reveil ENTREE_GASTON_BERGER
+17557  Fin sigChld
+17559  pid fils mort : 21992
+17559  Place libere : 4
+17559  Demande acces semaphore parking
+17559  Acces obtenu du semaphore parking
+17559  Liberation du semaphore parking
+17559  Demande acces du semaphore requete
+17559  Acces au semaphore requete
+17559  Nombre de places occupees apres semop : 8
+17559  Nombre de requetes : 2
+17559  Barriere de la meilleur requete : 2
+17559  Reveil AUTRE_BLAISE_PASCAL
+17559  Fin sigChld
+17561  pid fils mort : 21989
+17561  Place libere : 1
+17561  Demande acces semaphore parking
+17561  Acces obtenu du semaphore parking
+17561  Liberation du semaphore parking
+17561  Demande acces du semaphore requete
+17561  Acces au semaphore requete
+17561  Nombre de places occupees apres semop : 8
+17561  Nombre de requetes : 1
+17561  Barriere de la meilleur requete : 3
+17561  Reveil ENTREE_GASTON_BERGER
+17561  Fin sigChld
+17562  pid fils mort : 21991
+17562  Place libere : 3
+17562  Demande acces semaphore parking
+17562  Acces obtenu du semaphore parking
+17562  Liberation du semaphore parking
+17562  Demande acces du semaphore requete
+17562  Acces au semaphore requete
+17562  Nombre de places occupees apres semop : 8
+17562  Nombre de requetes : 1
+17562  Barriere de la meilleur requete : 2
+17562  Reveil AUTRE_BLAISE_PASCAL
+17562  Fin sigChld
+17564  pid fils mort : 21990
+17564  Place libere : 2
+17564  Demande acces semaphore parking
+17564  Acces obtenu du semaphore parking
+17564  Liberation du semaphore parking
+17564  Demande acces du semaphore requete
+17564  Acces au semaphore requete
+17564  Nombre de places occupees apres semop : 8
+17564  Nombre de requetes : 1
+17564  Barriere de la meilleur requete : 3
+17564  Reveil ENTREE_GASTON_BERGER
+17564  Fin sigChld
+17583  appel voiturier sortie
+17589  pid fils mort : 22006
+17589  Place libere : 8
+17589  Demande acces semaphore parking
+17589  Acces obtenu du semaphore parking
+17589  Liberation du semaphore parking
+17589  Demande acces du semaphore requete
+17589  Acces au semaphore requete
+17589  Nombre de places occupees apres semop : 8
+17589  Nombre de requetes : 2
+17589  Barriere de la meilleur requete : 2
+17589  Reveil AUTRE_BLAISE_PASCAL
+17589  Fin sigChld
+17592  appel voiturier sortie
+17598  pid fils mort : 22008
+17598  Place libere : 7
+17598  Demande acces semaphore parking
+17598  Acces obtenu du semaphore parking
+17598  Liberation du semaphore parking
+17598  Demande acces du semaphore requete
+17598  Acces au semaphore requete
+17598  Nombre de places occupees apres semop : 8
+17598  Nombre de requetes : 2
+17598  Barriere de la meilleur requete : 3
+17598  Reveil ENTREE_GASTON_BERGER
+17598  Fin sigChld
+17600  appel voiturier sortie
+17606  pid fils mort : 22012
+17606  Place libere : 8
+17606  Demande acces semaphore parking
+17606  Acces obtenu du semaphore parking
+17606  Liberation du semaphore parking
+17606  Demande acces du semaphore requete
+17606  Acces au semaphore requete
+17606  Nombre de places occupees apres semop : 8
+17606  Nombre de requetes : 1
+17606  Barriere de la meilleur requete : 2
+17606  Reveil AUTRE_BLAISE_PASCAL
+17606  Fin sigChld
+17658  appel voiturier sortie
+17658  appel voiturier sortie
+17659  appel voiturier sortie
+17659  appel voiturier sortie
+17659  appel voiturier sortie
+17659  appel voiturier sortie
+17660  appel voiturier sortie
+17660  appel voiturier sortie
+17661  Demande de mort de 22017
+17661  Mort de 22017
+17661  Demande de mort de 22018
+17661  Mort de 22018
+17661  Demande de mort de 22019
+17661  Mort de 22019
+17661  Demande de mort de 22020
+17661  Mort de 22020
+17661  Demande de mort de 22021
+17661  Mort de 22021
+17661  Demande de mort de 22022
+17661  Mort de 22022
+17661  Demande de mort de 22023
+17661  Mort de 22023
+17661  Demande de mort de 22024
+17661  Mort de 22024
+17661  Fin de barriereSortie

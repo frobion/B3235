@@ -28,6 +28,7 @@ MESSAGE = "Compilation terminée"
 .PHONY: clean log
 
 $(EXE): $(OBJ)
+	make log
 	$(LINK)  -o $(EXE) $^ $(EDLFLAGS) -ltp -lncurses -ltcl
 	$(ECHO) $(MESSAGE)
 
@@ -43,3 +44,7 @@ Entree.cpp:Entree.h config.h
 
 clean:
 	$(RM) -fv *.o $(EXE)
+	
+log: #Permet de réinitialiser les fichiers de logs entre chaque compilation
+	$(RM) -fv $(LOG)
+	touch $(LOG)

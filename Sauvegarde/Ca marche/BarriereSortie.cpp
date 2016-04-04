@@ -50,6 +50,8 @@ static struct sembuf incrSemProfBlaisePascal [1] = {{NUM_SEM_PROF_BLAISE_PASCAL,
 static struct sembuf incrSemAutreBlaisePascal [1] = {{NUM_SEM_AUTRE_BLAISE_PASCAL, 1, 0}};
 static struct sembuf incrSemGastonBerger [1] = {{NUM_SEM_GASTON_BERGER, 1, 0}};
 
+static fstream fichier ("LogBarriereSortie.txt");
+
 
 //------------------------------------------------------ Fonctions privées
 
@@ -59,6 +61,7 @@ static int chercheRequetesActuelles(Requete* requetesActuelles)
 {
   if (requeteMPPtr->nbPlacesOccupees != NB_PLACES)
   {
+	fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees : " << requeteMPPtr->nbPlacesOccupees << std::endl;
     return 0;
   }
   int nbRequetesActuelles = 0;
@@ -91,14 +94,18 @@ static void initVoiture(Voiture* voiture)
 
 static void handlerSigChld (int noSignal)
 {
-  time_t tempsSortie = (time(NULL)) % TEMPS_MAX	;
+  time_t tempsSortie = (time(NULL)) % DECIMAL_TEMPS	;
   int numeroPlaceLibere;
   pid_t pidFilsMort = waitpid(-1, &numeroPlaceLibere, 0); // Destruction du fils mort
   numeroPlaceLibere = WEXITSTATUS(numeroPlaceLibere);
   listeVoiturierSortie.erase(pidFilsMort);
+  fichier << time(NULL)%TEMPS_MAX << "  " << "pid fils mort : " << pidFilsMort << std::endl << time(NULL)%TEMPS_MAX << "  Place libere : " << numeroPlaceLibere << std::endl;
   
   // Acces au semaphore de protection de parking
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces semaphore parking" << std::endl;
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop decr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop (semId, decrSemParking, 1) == -1 && errno == EINTR);
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Acces obtenu du semaphore parking" << std::endl;
   
   // Remise de la place dans l'etat sans voiture
   AfficherSortie(parkingMPPtr->parking[numeroPlaceLibere - 1].usager, parkingMPPtr->parking[numeroPlaceLibere - 1].immatriculation, 
@@ -107,16 +114,23 @@ static void handlerSigChld (int noSignal)
   Effacer((TypeZone) numeroPlaceLibere); // A verifier Correspond a la bonne valeur de la zone de l'enum
   
   // Liberation du semaphore de protection de parking
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop incr parking: " << requeteMPPtr->nbPlacesOccupees << std::endl;
   semop(semId, incrSemParking, 1);
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Liberation du semaphore parking" << std::endl;
   
   
   
   Requete requetesActuelles [NB_BARRIERES_ENTREE];
   int nbRequetesActuelles;
   // Acces au semaphore de protection des requetes
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Demande acces du semaphore requete" << std::endl;
+  //fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees avant semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
   while(semop(semId, decrSemRequete, 1) == -1 && errno == EINTR);
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Acces au semaphore requete" << std::endl;
   
+  fichier << time(NULL)%TEMPS_MAX << "  Nombre de places occupees apres semop : " << requeteMPPtr->nbPlacesOccupees << std::endl;
   nbRequetesActuelles = chercheRequetesActuelles(requetesActuelles);
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Nombre de requetes : " << nbRequetesActuelles << std::endl;
   
   if (nbRequetesActuelles == 0)
   {
@@ -129,9 +143,11 @@ static void handlerSigChld (int noSignal)
 	{
 	  meilleurRequete = *comparePrioriteRequetes(&meilleurRequete, &requetesActuelles[i]);
 	}
+	fichier << time(NULL)%TEMPS_MAX << "  " << "Barriere de la meilleur requete : " << meilleurRequete.barriere << std::endl;
 	switch(meilleurRequete.barriere)
 	{
 	  case PROF_BLAISE_PASCAL:
+	    fichier << time(NULL)%TEMPS_MAX << "  " <<"Reveil PROF_BLAISE_PASCAL" << std::endl;
 	    // Reveil de la tache entree correspondante
 	    semop (semId, incrSemProfBlaisePascal, 1);
 	    // Reinitilisation de la MP pour la requete correspondante
@@ -141,12 +157,14 @@ static void handlerSigChld (int noSignal)
 	    Effacer(TypeZone::REQUETE_R1);
 	    break;
 	  case AUTRE_BLAISE_PASCAL:
+	    fichier << time(NULL)%TEMPS_MAX << "  " << "Reveil AUTRE_BLAISE_PASCAL" << std::endl;
 	    semop(semId, incrSemAutreBlaisePascal, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::AUTRE_BLAISE_PASCAL - 1].barriere = TypeBarriere::AUCUNE;
 	    Effacer(TypeZone::REQUETE_R2);
 	    break;
 	  case ENTREE_GASTON_BERGER:
+	    fichier << time(NULL)%TEMPS_MAX << "  " << "Reveil ENTREE_GASTON_BERGER" << std::endl;
 	    semop(semId, incrSemGastonBerger, 1);
 	    initVoiture(&(requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].voiture));
 	    requeteMPPtr->requetes[TypeBarriere::ENTREE_GASTON_BERGER - 1].barriere	 = TypeBarriere::AUCUNE;
@@ -154,10 +172,12 @@ static void handlerSigChld (int noSignal)
 	    break;
 	  default:
 	    Afficher(TypeZone::MESSAGE, "Mauvaise barriere, handler SIGCHLD, barriereSortie");
+	    fichier << time(NULL)%TEMPS_MAX << "  " << "default" << std::endl;
 	    break;
 	}
   }
   semop(semId, incrSemRequete, 1); // Liberation du semaphore de protection des requetes
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Fin sigChld" << std::endl;
 }
 
 static void handlerSigUsr2 (int noSignal)
@@ -172,9 +192,13 @@ static void handlerSigUsr2 (int noSignal)
   for (it = listeVoiturierSortie.begin(); it != listeVoiturierSortie.end(); it++)
   {
 	kill(*it, SIGUSR2);
+	fichier << time(NULL)%TEMPS_MAX << "  " << "Demande de mort de " << *it << std::endl;
 	while(waitpid(*it, NULL, 0) == -1 && errno == EINTR);
+	fichier << time(NULL)%TEMPS_MAX << "  " << "Mort de " << *it << std::endl;
   }
   
+  fichier << time(NULL)%TEMPS_MAX << "  " << "Fin de barriereSortie" << std::endl;
+  fichier.close();
   exit(0);
 }
 
@@ -234,5 +258,6 @@ void BarriereSortie(int canauxBarriereEntree[][2], int canalBarriereSortie[], in
 	{
 	  listeVoiturierSortie.insert(pid);
 	}
+	fichier << time(NULL)%TEMPS_MAX << "  " << "appel voiturier sortie" << std::endl;
   }
 }

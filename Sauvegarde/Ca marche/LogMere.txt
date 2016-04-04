@@ -1,0 +1,7 @@
+17441  Cle2 : 1344866481
+17441  Cle3 : 1378420913
+17441  Indice du semaphore 0 : 0 0
+17441  Indice du semaphore 1 : 0 0
+17441  Indice du semaphore 2 : 0 0
+17441  Indice du semaphore 3 : 0 1
+17441  Indice du semaphore 4 : 0 1

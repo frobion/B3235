@@ -42,6 +42,7 @@
 //---------------------------------------------------- Fonctions publiques
 int main(void) {
 
+	fstream fichier("LogMere.txt");
 
 	// VT220 Si SSH
 	// XTERM par défaut
@@ -79,6 +80,7 @@ int main(void) {
 
 		// -- Memoire Parking
 		key_t cle2 = ftok(pathname, 'P');
+		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle2 : " << cle2 << std::endl;
 		int shmIdParking = shmget(cle2, sizeof(ParkingMP), IPC_CREAT | 0660);
 
 		  // Attachement memoire partagee parking
@@ -94,6 +96,7 @@ int main(void) {
 
 		// -- Memoire Requete + Compteur
 		key_t cle3 = ftok(pathname, 'R');
+		fichier << time(NULL)%TEMPS_MAX << "  " << "Cle3 : " << cle3 << std::endl;
 		int shmIdRequete = shmget(cle3, sizeof(RequeteMP), IPC_CREAT | 0660);
 
 		  // Attachement memoire partagee requete
@@ -119,6 +122,14 @@ int main(void) {
 		semctl(semId, NUM_SEM_PROF_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_AUTRE_BLAISE_PASCAL, SETVAL, 0);
 		semctl(semId, NUM_SEM_GASTON_BERGER, SETVAL, 0);
+
+		unsigned short int val;
+		int val2;
+		for (int i = 0; i < 5; i++)
+		{
+			val2 = semctl(semId, i, GETVAL, &val);
+			fichier << time(NULL)%TEMPS_MAX << "  " << "Indice du semaphore " << i << " : " << val << " " << val2 << std::endl;
+		}
 
 
 	 // ----- Creation des canaux

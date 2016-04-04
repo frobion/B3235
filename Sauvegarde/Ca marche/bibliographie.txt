@@ -1,0 +1,1 @@
+http://www.advancedlinuxprogramming-fr.org/doku.php?id=livre:chap5:communication_interprocessus

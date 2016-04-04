@@ -1,0 +1,4 @@
+recup semaphore barriere entree
+Mauvaise priorite d'entree
+nbPlacesOccupes = 7984 / 8407 => depend de l'heure ??
+Commentaire de la creation de BPBL => ca marche presque (sortie a revoir legerement, ne fait pas entrer les voitures en attente)

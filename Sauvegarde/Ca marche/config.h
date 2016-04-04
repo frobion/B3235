@@ -39,6 +39,7 @@ const int NUM_SEM_REQUETE = 4;
 
 const int TEMPO = 1; // temporisation d'attente avant l'arrivee d'un nouveau vehicule
 
-const int TEMPS_MAX = 10000;
+const int TEMPS_MAX = 100000;
+const int DECIMAL_TEMPS = 10000;
 
 #endif
